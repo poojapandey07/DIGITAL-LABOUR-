@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>डिजिटल लेबर चौक | Digital Labor Chowk - Worker–Employer Job Portal</title>
+  
+  <!-- PWA & Mobile Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b2545">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="assets/icons/emblem.svg">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  
+  <!-- Inline Specific Styles for Index -->
+  <style>
+    .hero-section {
+      background: linear-gradient(135deg, #0b2545 0%, #133b68 100%);
+      color: #ffffff;
+      padding: 56px 0 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-section::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(247, 148, 29, 0.15) 0%, rgba(247, 148, 29, 0) 70%);
+      pointer-events: none;
+    }
+    .hero-content {
+      max-width: 780px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(247, 148, 29, 0.2);
+      border: 1px solid rgba(247, 148, 29, 0.5);
+      color: #ffb74d;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+    .hero-title {
+      font-size: 2.75rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      color: #ffffff;
+    }
+    .hero-title span {
+      color: var(--accent-saffron);
+    }
+    .hero-subtitle {
+      font-size: 1.2rem;
+      color: #cbd5e1;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+    .hero-desc {
+      font-size: var(--font-size-base);
+      color: #94a3b8;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .stats-bar {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      padding: 24px 0;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 1.875rem;
+      font-weight: 800;
+      color: var(--primary-navy);
+      line-height: 1.1;
+    }
+    .stat-desc {
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+    .section-padding {
+      padding: 64px 0;
+    }
+    .section-header {
+      text-align: center;
+      max-width: 650px;
+      margin: 0 auto 44px;
+    }
+    .section-tag {
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      color: var(--accent-saffron-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+    .section-title {
+      font-size: var(--font-size-3xl);
+      font-weight: 800;
+      color: var(--primary-navy);
+      line-height: 1.25;
+    }
+    .section-desc {
+      font-size: var(--font-size-base);
+      color: var(--text-muted);
+      margin-top: 10px;
+    }
+    .step-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 28px 20px;
+      text-align: center;
+      position: relative;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .step-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      border-color: #cbd5e1;
+    }
+    .step-badge {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary-navy);
+      color: var(--accent-saffron);
+      font-size: 12px;
+      font-weight: 800;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #ffffff;
+    }
+    .step-icon {
+      font-size: 40px;
+      margin: 8px 0 16px;
+      line-height: 1;
+    }
+    .step-title {
+      font-size: var(--font-size-lg);
+      font-weight: 700;
+      color: var(--primary-navy);
+      margin-bottom: 8px;
+    }
+    .step-desc {
+      font-size: var(--font-size-sm);
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .highlight-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      box-shadow: var(--shadow-sm);
+    }
+    .highlight-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-sm);
+      background-color: var(--accent-saffron-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      flex-shrink: 0;
+    }
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 14px;
+    }
+    .category-pill {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 16px 12px;
+      text-align: center;
+      text-decoration: none;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .category-pill:hover {
+      border-color: var(--accent-saffron);
+      background-color: #fffaf5;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+    .category-icon {
+      font-size: 28px;
+      line-height: 1;
+    }
+    .category-name {
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      color: var(--primary-navy);
+      line-height: 1.2;
+    }
+    @media (max-width: 768px) {
+      .hero-title { font-size: 1.95rem; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+      .category-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PWA Mobile Install Banner -->
+  <div id="dlc-pwa-banner" class="pwa-install-bar">
+    <div class="pwa-install-bar-content">
+      <span>📲 <strong>ऐप इंस्टॉल करें:</strong> आसान पहुंच के लिए फोन पर जोड़ें</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <button type="button" class="pwa-install-btn btn-install-pwa">इंस्टॉल करें</button>
+      <button type="button" class="pwa-close-btn" aria-label="Dismiss">&times;</button>
+    </div>
+  </div>
+
+  <!-- Tricolor Top Stripe -->
+  <div class="gov-stripe"></div>
+
+  <!-- Government Portal Banner -->
+  <div class="gov-banner">
+    <div class="container">
+      <div class="gov-banner-text">
+        <span class="gov-flag">🇮🇳</span>
+        <span>श्रम एवं रोजगार मंत्रालय | Ministry of Labour &amp; Employment Initiative Demo</span>
+      </div>
+      <div>
+        <span>राष्ट्रीय डिजिटल चौक मंच</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Site Navigation Header -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="index.html" class="brand-link">
+          <div class="brand-emblem" aria-hidden="true">🏛️</div>
+          <div class="brand-text">
+            <span class="brand-title">डिजिटल <span>लेबर चौक</span></span>
+            <span class="brand-sub">Digital Labor Chowk Portal</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <ul class="nav-menu">
+          <li><a href="index.html" class="nav-link active">🏠 होम (Home)</a></li>
+          <li><a href="pages/job-search.html" class="nav-link">🔎 काम खोजें (Search Jobs)</a></li>
+          <li><a href="pages/worker-login.html" class="nav-link">👷 श्रमिक लॉगिन (Worker)</a></li>
+          <li><a href="pages/employer-login.html" class="nav-link">🏢 नियोक्ता लॉगिन (Employer)</a></li>
+        </ul>
+
+        <!-- Dynamic User Status / Action Buttons -->
+        <div id="nav-auth-container" class="nav-auth"></div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Landing Content -->
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-badge">
+            ⚡ डायरेक्ट वर्कर-एम्प्लॉयर कनेक्ट (Zero Middlemen)
+          </div>
+          <h1 class="hero-title">
+            रोजगार का नया <span>डिजिटल भरोसा</span>
+          </h1>
+          <p class="hero-subtitle">
+            "A New Digital Trust for Employment &amp; Fair Daily Wages"
+          </p>
+          <p class="hero-desc">
+            चौक पर घंटों खड़े रहने की जरूरत नहीं! राजमिस्त्री, इलेक्ट्रीशियन, प्लंबर, कारपेंटर, पेंटर व मजदूरों को अब सीधा काम और सही मजदूरी मोबाइल पर।
+          </p>
+
+          <div class="hero-actions">
+            <a href="pages/worker-login.html" class="btn btn-accent btn-lg">
+              👷 मुझे काम चाहिए (I'm a Worker)
+            </a>
+            <a href="pages/employer-login.html" class="btn btn-outline-white btn-lg">
+              🏢 मुझे कारीगर चाहिए (I'm an Employer)
+            </a>
+            <a href="pages/job-search.html" class="btn btn-primary btn-lg" style="background:#0a1c33;">
+              🔎 सभी काम देखें (Browse Jobs)
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Real-time Stats Ticker -->
+    <div class="stats-bar">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-number">5,420+</div>
+            <div class="stat-desc">पंजीकृत श्रमिक (Registered Workers)</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">1,180+</div>
+            <div class="stat-desc">सत्यापित नियोक्ता (Verified Employers)</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">₹0</div>
+            <div class="stat-desc">कमीशन (Zero Middlemen Fees)</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">100%</div>
+            <div class="stat-desc">प्रत्यक्ष संपर्क (Direct Mobile Call)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How It Works Section -->
+    <section class="section-padding">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">आसान प्रक्रिया (How It Works)</div>
+          <h2 class="section-title">सरल 4 चरणों में काम पाएं और दें</h2>
+          <p class="section-desc">श्रमिक और नियोक्ता दोनों के लिए पूरी तरह डिजिटल, सुरक्षित और पारदर्शी प्रणाली</p>
+        </div>
+
+        <div class="grid-4">
+          <!-- Step 1 -->
+          <div class="step-card">
+            <span class="step-badge">1</span>
+            <div class="step-icon">📱</div>
+            <h3 class="step-title">आसान रजिस्ट्रेशन</h3>
+            <p class="step-desc">
+              अपने मोबाइल नंबर और अपने हुनर/ट्रेड (राजमिस्त्री, प्लंबर आदि) का चयन करके 30 सेकंड में खाता बनाएं।
+            </p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="step-card">
+            <span class="step-badge">2</span>
+            <div class="step-icon">🔍</div>
+            <h3 class="step-title">काम खोजें या पोस्ट करें</h3>
+            <p class="step-desc">
+              श्रमिक अपने शहर में पसंदीदा दिहाड़ी वाले काम खोजें; ठेकेदार व मालिक काम की आवश्यकता पोस्ट करें।
+            </p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="step-card">
+            <span class="step-badge">3</span>
+            <div class="step-icon">🤝</div>
+            <h3 class="step-title">सीधा संपर्क</h3>
+            <p class="step-desc">
+              बिना किसी बिचौलिए के सीधे फोन पर बात करें, कार्य स्थल और पारदर्शी दैनिक मजदूरी तय करें।
+            </p>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="step-card">
+            <span class="step-badge">4</span>
+            <div class="step-icon">💰</div>
+            <h3 class="step-title">काम व त्वरित भुगतान</h3>
+            <p class="step-desc">
+              सम्मानपूर्वक काम पूरा करें और अपनी तय दिहाड़ी सीधे प्राप्त करें। कोई कमीशन या कटौती नहीं।
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Popular Trades & Skills -->
+    <section class="section-padding" style="background-color: #f8fafc; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">लोकप्रिय श्रेणियां (Popular Trades)</div>
+          <h2 class="section-title">प्रमुख कौशल एवं कारीगर</h2>
+          <p class="section-desc">अपनी जरूरत के अनुसार संबंधित ट्रेड पर क्लिक करें</p>
+        </div>
+
+        <div class="category-grid" id="popular-trades-grid">
+          <a href="pages/job-search.html?category=mason" class="category-pill">
+            <span class="category-icon">🧱</span>
+            <span class="category-name">राजमिस्त्री<br>(Mason)</span>
+          </a>
+          <a href="pages/job-search.html?category=electrician" class="category-pill">
+            <span class="category-icon">⚡</span>
+            <span class="category-name">इलेक्ट्रीशियन<br>(Electrician)</span>
+          </a>
+          <a href="pages/job-search.html?category=plumber" class="category-pill">
+            <span class="category-icon">🔧</span>
+            <span class="category-name">प्लंबर<br>(Plumber)</span>
+          </a>
+          <a href="pages/job-search.html?category=carpenter" class="category-pill">
+            <span class="category-icon">🪚</span>
+            <span class="category-name">बढ़ई<br>(Carpenter)</span>
+          </a>
+          <a href="pages/job-search.html?category=painter" class="category-pill">
+            <span class="category-icon">🎨</span>
+            <span class="category-name">पेंटर<br>(Painter)</span>
+          </a>
+          <a href="pages/job-search.html?category=welder" class="category-pill">
+            <span class="category-icon">🔥</span>
+            <span class="category-name">वेल्डर<br>(Welder)</span>
+          </a>
+          <a href="pages/job-search.html?category=labor" class="category-pill">
+            <span class="category-icon">👷</span>
+            <span class="category-name">मजदूर / हेल्पर<br>(General Labor)</span>
+          </a>
+          <a href="pages/job-search.html?category=tile" class="category-pill">
+            <span class="category-icon">🏛️</span>
+            <span class="category-name">टाइल कारीगर<br>(Tile Worker)</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Poster Highlights Section -->
+    <section class="section-padding">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">डिजिटल लेबर चौक की विशेषताएं (Key Highlights)</div>
+          <h2 class="section-title">श्रम शक्ति को सशक्त बनाने का नया कदम</h2>
+          <p class="section-desc">पारंपरिक लेबर अड्डों की अनिश्चितता को दूर करने के लिए आधुनिक डिजिटल समाधान</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="highlight-card">
+            <div class="highlight-icon">📲</div>
+            <div>
+              <h3 class="card-title mb-2">मोबाइल ऐप व डिजिटल कियोस्क सुविधा</h3>
+              <p class="text-muted">
+                स्मार्टफोन या नजदीकी सरकारी जन-सेवा केंद्र (CSC) डिजिटल कियोस्क से बिना किसी झंझट के काम खोजें और आवेदन करें।
+              </p>
+            </div>
+          </div>
+
+          <div class="highlight-card">
+            <div class="highlight-icon">🚫</div>
+            <div>
+              <h3 class="card-title mb-2">बिचौलियों और दलालों से मुक्ति</h3>
+              <p class="text-muted">
+                ठेकेदार और श्रमिक का सीधा संवाद। न कोई एजेंट कमीशन और न ही मजदूरी में कोई कटौती। 100% कमाई आपकी।
+              </p>
+            </div>
+          </div>
+
+          <div class="highlight-card">
+            <div class="highlight-icon">⏱️</div>
+            <div>
+              <h3 class="card-title mb-2">कहीं भी, कभी भी काम की उपलब्धता</h3>
+              <p class="text-muted">
+                1 दिन का तात्कालिक कार्य हो या महीनों की लंबी साइट, अपने समय और सुविधानुसार सही प्रोजेक्ट का चयन करें।
+              </p>
+            </div>
+          </div>
+
+          <div class="highlight-card">
+            <div class="highlight-icon">🛡️</div>
+            <div>
+              <h3 class="card-title mb-2">सुरक्षित, पारदर्शी एवं सम्मानजनक रोजगार</h3>
+              <p class="text-muted">
+                रेट और कार्य की शर्तें पहले से तय। श्रम के सम्मान और समय पर पारदर्शी भुगतान की पक्की व्यवस्था।
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Available Jobs Preview -->
+    <section class="section-padding" style="background-color: #f1f5f9; border-top: 1px solid var(--border-color);">
+      <div class="container">
+        <div class="flex justify-between items-center mb-6" style="flex-wrap: wrap; gap: 12px;">
+          <div>
+            <div class="section-tag">ताजा उपलब्ध कार्य (Recent Jobs)</div>
+            <h2 class="section-title" style="font-size:1.75rem;">आज के उपलब्ध काम</h2>
+          </div>
+          <a href="pages/job-search.html" class="btn btn-outline">
+            सभी काम देखें (View All Jobs) &rarr;
+          </a>
+        </div>
+
+        <div class="grid-3" id="home-featured-jobs">
+          <!-- Dynamically filled with top 3 seed jobs -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="mobile-bottom-nav">
+    <a href="index.html" class="bottom-nav-item active">
+      <span class="nav-icon">🏠</span>
+      <span>होम</span>
+    </a>
+    <a href="pages/job-search.html" class="bottom-nav-item">
+      <span class="nav-icon">🔎</span>
+      <span>काम खोजें</span>
+    </a>
+    <a href="pages/worker-dashboard.html" id="bottom-nav-dashboard" class="bottom-nav-item">
+      <span class="nav-icon">📊</span>
+      <span>डैशबोर्ड</span>
+    </a>
+    <a href="pages/worker-profile.html" id="bottom-nav-profile" class="bottom-nav-item">
+      <span class="nav-icon">👤</span>
+      <span>प्रोफाइल</span>
+    </a>
+  </nav>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>🏛️ डिजिटल लेबर चौक (DLC)</h4>
+          <p>
+            दैनिक वेतनभोगी श्रमिकों और नियोक्ताओं को जोड़ने वाला पारदर्शी एवं डिजिटल मंच। श्रम एवं रोजगार मंत्रालय के विजन के अनुरूप।
+          </p>
+          <div class="helpline-box">
+            <div style="font-size:12px; color:#cbd5e1;">श्रम सहायता हेल्पलाइन (Toll-Free Helpline)</div>
+            <div class="helpline-number">📞 14434 / 1800-180-5522</div>
+            <div style="font-size:11px; color:#94a3b8;">सुबह 8:00 से रात 8:00 बजे तक (निःशुल्क सेवा)</div>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>श्रमिक सेवाएं (For Workers)</h4>
+          <ul class="footer-links">
+            <li><a href="pages/worker-login.html">श्रमिक पंजीकरण (Register)</a></li>
+            <li><a href="pages/worker-login.html">श्रमिक लॉगिन (Worker Login)</a></li>
+            <li><a href="pages/job-search.html">दैनिक काम खोजें (Search Jobs)</a></li>
+            <li><a href="pages/worker-profile.html">कारीगर प्रोफाइल (Worker Profile)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>नियोक्ता सेवाएं (For Employers)</h4>
+          <ul class="footer-links">
+            <li><a href="pages/employer-login.html">नियोक्ता लॉगिन (Employer Login)</a></li>
+            <li><a href="pages/post-job.html">नया कार्य पोस्ट करें (Post a Job)</a></li>
+            <li><a href="pages/post-job.html">आवेदक देखें (View Applicants)</a></li>
+            <li><a href="pages/job-search.html">कारीगर उपलब्धता (Worker Market)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>डेमो एवं PWA टूल्स (Mobile PWA)</h4>
+          <p>यह एप्लिकेशन आपके फोन पर सीधे ऐप की तरह इंस्टॉल हो सकती है।</p>
+          <div class="flex flex-col gap-2 mt-2">
+            <button type="button" class="btn btn-accent btn-sm btn-install-pwa" style="width:100%;">
+              📲 ऐप इंस्टॉल करें (Install App)
+            </button>
+            <button type="button" id="btn-reset-demo-data" class="btn btn-outline-white btn-sm" style="width:100%;">
+              🔄 रीसेट डेमो डेटा (Reset Data)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          &copy; 2026 डिजिटल लेबर चौक (Digital Labor Chowk). ओपन-सोर्स कोडबेस (MIT License).
+        </div>
+        <div class="footer-tools">
+          <span>हिंदी / English</span>
+          <span>•</span>
+          <span>मोबाइल-रेडी PWA</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/storage.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/jobs.js"></script>
+  <script src="js/main.js"></script>
+
+  <!-- Page Specific Script: Render Top 3 Featured Jobs -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('home-featured-jobs');
+      if (!container) return;
+
+      const jobs = JobManager.getAllJobs().filter(j => j.status === 'active').slice(0, 3);
+      const session = AuthManager.getSession();
+
+      if (jobs.length === 0) {
+        container.innerHTML = '<p class="text-muted">कोई सक्रिय कार्य उपलब्ध नहीं है।</p>';
+        return;
+      }
+
+      container.innerHTML = jobs.map(job => {
+        const hasApplied = session && session.role === 'worker' ? JobManager.hasWorkerApplied(job.id, session.userId) : false;
+        return createJobCardHTML(job, hasApplied, true);
+      }).join('');
+
+      // Wire up apply buttons
+      container.querySelectorAll('.btn-apply-job').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const jobId = e.target.getAttribute('data-job-id');
+          const currentWorker = AuthManager.getCurrentUser();
+
+          if (!currentWorker || currentWorker.role !== 'worker') {
+            showToast('कृपया पहले श्रमिक के रूप में लॉगिन करें (Worker login required)', 'warning');
+            setTimeout(() => {
+              window.location.href = 'pages/worker-login.html';
+            }, 1000);
+            return;
+          }
+
+          const res = JobManager.applyForJob(jobId, currentWorker);
+          if (res.success) {
+            showToast('सफलतापूर्वक आवेदन भेजा गया! (Application Sent)', 'success');
+            e.target.outerHTML = '<button class="btn btn-sm btn-outline disabled" disabled>✓ आवेदन किया (Applied)</button>';
+          } else {
+            showToast(res.message, 'warning');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

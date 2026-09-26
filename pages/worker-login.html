@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>श्रमिक लॉगिन एवं पंजीकरण | Digital Labor Chowk</title>
+  
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#0b2545">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="../assets/icons/emblem.svg">
+  
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  
+  <style>
+    .auth-container {
+      max-width: 520px;
+      margin: 40px auto;
+      padding: 0 16px;
+    }
+    .auth-card {
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-md);
+      padding: 32px 28px;
+    }
+    .auth-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .auth-icon-badge {
+      width: 56px;
+      height: 56px;
+      background: var(--accent-saffron-light);
+      color: var(--accent-saffron-dark);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+    .auth-title {
+      font-size: var(--font-size-2xl);
+      font-weight: 800;
+      color: var(--primary-navy);
+      margin-bottom: 4px;
+    }
+    .auth-subtitle {
+      font-size: var(--font-size-sm);
+      color: var(--text-muted);
+    }
+    .switch-link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: var(--font-size-sm);
+      color: var(--text-muted);
+    }
+    .switch-link a {
+      color: var(--primary-navy);
+      font-weight: 700;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Tricolor Top Stripe -->
+  <div class="gov-stripe"></div>
+
+  <!-- Gov Banner -->
+  <div class="gov-banner">
+    <div class="container">
+      <div class="gov-banner-text">
+        <span class="gov-flag">🇮🇳</span>
+        <span>श्रम एवं रोजगार मंत्रालय | Ministry of Labour &amp; Employment</span>
+      </div>
+      <div>
+        <span>श्रमिक सेवा पोर्टल</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="../index.html" class="brand-link">
+          <div class="brand-emblem" aria-hidden="true">🏛️</div>
+          <div class="brand-text">
+            <span class="brand-title">डिजिटल <span>लेबर चौक</span></span>
+            <span class="brand-sub">Worker Portal</span>
+          </div>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="../index.html" class="nav-link">🏠 होम (Home)</a></li>
+          <li><a href="job-search.html" class="nav-link">🔎 काम खोजें (Search Jobs)</a></li>
+          <li><a href="worker-login.html" class="nav-link active">👷 श्रमिक (Worker)</a></li>
+          <li><a href="employer-login.html" class="nav-link">🏢 नियोक्ता (Employer)</a></li>
+        </ul>
+
+        <div id="nav-auth-container" class="nav-auth"></div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Form Content -->
+  <main>
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-header">
+          <div class="auth-icon-badge">👷</div>
+          <h1 class="auth-title">श्रमिक साथी पोर्टल</h1>
+          <p class="auth-subtitle">अपने हुनर के अनुसार नजदीकी दैनिक कार्य पाएं</p>
+        </div>
+
+        <!-- Quick 1-Click Demo Login Box -->
+        <div class="demo-login-box">
+          <p><strong>⚡ त्वरित परीक्षण (Quick Demo Test):</strong></p>
+          <button type="button" id="btn-demo-worker" class="btn btn-outline btn-sm btn-block" style="border-color:var(--accent-saffron); font-weight:700;">
+            ⚡ रमेश कुमार के रूप में सीधे लॉगिन करें (Demo Login)
+          </button>
+        </div>
+
+        <!-- Tabs: Login vs Register -->
+        <div class="tabs-header" role="tablist">
+          <button type="button" class="tab-btn active" id="tab-login" role="tab" aria-selected="true">
+            लॉगिन (Sign In)
+          </button>
+          <button type="button" class="tab-btn" id="tab-signup" role="tab" aria-selected="false">
+            नया पंजीकरण (Sign Up)
+          </button>
+        </div>
+
+        <!-- 1. LOGIN FORM -->
+        <form id="form-worker-login" class="tab-pane active" novalidate>
+          <div class="form-group" id="grp-login-phone">
+            <label class="form-label" for="login-phone">
+              मोबाइल नंबर (Mobile Number) <span class="req">*</span>
+            </label>
+            <div class="input-icon-wrapper">
+              <span class="input-icon">📱</span>
+              <input 
+                type="tel" 
+                id="login-phone" 
+                class="form-input input-with-icon" 
+                placeholder="उदा. 9876543210" 
+                maxlength="10" 
+                required 
+              />
+            </div>
+            <div class="form-error-msg" id="err-login-phone">कृपया 10 अंकों का वैध मोबाइल नंबर दर्ज करें।</div>
+          </div>
+
+          <div class="form-group" id="grp-login-password">
+            <label class="form-label" for="login-password">
+              पासवर्ड (Password) <span class="req">*</span>
+            </label>
+            <div class="input-icon-wrapper">
+              <span class="input-icon">🔒</span>
+              <input 
+                type="password" 
+                id="login-password" 
+                class="form-input input-with-icon" 
+                placeholder="अपना पासवर्ड दर्ज करें" 
+                required 
+              />
+            </div>
+            <div class="form-error-msg" id="err-login-password">कृपया अपना पासवर्ड दर्ज करें।</div>
+          </div>
+
+          <button type="submit" class="btn btn-accent btn-lg btn-block mt-4">
+            प्रवेश करें (Sign In) &rarr;
+          </button>
+        </form>
+
+        <!-- 2. SIGN UP FORM -->
+        <form id="form-worker-signup" class="tab-pane" novalidate>
+          <div class="form-group" id="grp-reg-name">
+            <label class="form-label" for="reg-name">
+              पूरा नाम (Full Name) <span class="req">*</span>
+            </label>
+            <div class="input-icon-wrapper">
+              <span class="input-icon">👤</span>
+              <input 
+                type="text" 
+                id="reg-name" 
+                class="form-input input-with-icon" 
+                placeholder="उदा. रमेश कुमार / Ramesh Kumar" 
+                required 
+              />
+            </div>
+            <div class="form-error-msg" id="err-reg-name">कृपया अपना पूरा नाम दर्ज करें।</div>
+          </div>
+
+          <div class="form-group" id="grp-reg-phone">
+            <label class="form-label" for="reg-phone">
+              मोबाइल नंबर (10-Digit Mobile) <span class="req">*</span>
+            </label>
+            <div class="input-icon-wrapper">
+              <span class="input-icon">📱</span>
+              <input 
+                type="tel" 
+                id="reg-phone" 
+                class="form-input input-with-icon" 
+                placeholder="10 अंकों का मोबाइल नंबर" 
+                maxlength="10" 
+                required 
+              />
+            </div>
+            <div class="form-error-msg" id="err-reg-phone">कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें।</div>
+          </div>
+
+          <div class="form-group" id="grp-reg-password">
+            <label class="form-label" for="reg-password">
+              पासवर्ड बनाएं (Create Password) <span class="req">*</span>
+            </label>
+            <div class="input-icon-wrapper">
+              <span class="input-icon">🔒</span>
+              <input 
+                type="password" 
+                id="reg-password" 
+                class="form-input input-with-icon" 
+                placeholder="कम से कम 4 अक्षर या अंक" 
+                required 
+              />
+            </div>
+            <div class="form-error-msg" id="err-reg-password">पासवर्ड कम से कम 4 अक्षरों का होना चाहिए।</div>
+          </div>
+
+          <div class="form-group" id="grp-reg-skill">
+            <label class="form-label" for="reg-skill">
+              मुख्य ट्रेड/कौशल (Primary Skill) <span class="req">*</span>
+            </label>
+            <select id="reg-skill" class="form-select" required>
+              <option value="">-- अपना ट्रेड चुनें --</option>
+              <option value="Mason / राजमिस्त्री">🧱 राजमिस्त्री (Mason)</option>
+              <option value="Electrician / इलेक्ट्रीशियन">⚡ इलेक्ट्रीशियन (Electrician)</option>
+              <option value="Plumber / प्लंबर">🔧 प्लंबर (Plumber)</option>
+              <option value="Carpenter / बढ़ई">🪚 बढ़ई (Carpenter)</option>
+              <option value="Painter / पेंटर">🎨 पेंटर (Painter)</option>
+              <option value="Welder / वेल्डर">🔥 वेल्डर (Welder)</option>
+              <option value="Tile & Marble Worker / टाइल कारीगर">🏛️ टाइल/मार्बल कारीगर</option>
+              <option value="General Labor / मजदूर">👷 मजदूर / हेल्पर (General Labor)</option>
+              <option value="Driver & Loader / ड्राइवर">🚚 ड्राइवर एवं लोडर</option>
+            </select>
+            <div class="form-error-msg" id="err-reg-skill">कृपया अपना प्राथमिक ट्रेड चुनें।</div>
+          </div>
+
+          <div class="form-row flex gap-3">
+            <div class="form-group" style="flex:1;" id="grp-reg-location">
+              <label class="form-label" for="reg-location">
+                शहर / जिला (City) <span class="req">*</span>
+              </label>
+              <select id="reg-location" class="form-select" required>
+                <option value="">-- शहर चुनें --</option>
+                <option value="New Delhi / नई दिल्ली">नई दिल्ली (New Delhi)</option>
+                <option value="Noida / नोएडा">नोएडा (Noida)</option>
+                <option value="Gurugram / गुरुग्राम">गुरुग्राम (Gurugram)</option>
+                <option value="Jaipur / जयपुर">जयपुर (Jaipur)</option>
+                <option value="Lucknow / लखनऊ">लखनऊ (Lucknow)</option>
+                <option value="Mumbai / मुंबई">मुंबई (Mumbai)</option>
+                <option value="Bengaluru / बेंगलुरु">बेंगलुरु (Bengaluru)</option>
+                <option value="Patna / पटना">पटना (Patna)</option>
+              </select>
+              <div class="form-error-msg" id="err-reg-location">कृपया शहर चुनें।</div>
+            </div>
+
+            <div class="form-group" style="flex:1;">
+              <label class="form-label" for="reg-experience">
+                अनुभव (Years)
+              </label>
+              <select id="reg-experience" class="form-select">
+                <option value="1">1 वर्ष</option>
+                <option value="2">2 वर्ष</option>
+                <option value="3">3 वर्ष</option>
+                <option value="5" selected>5 वर्ष</option>
+                <option value="7">7 वर्ष</option>
+                <option value="10">10+ वर्ष</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-wage">
+              अपेक्षित दैनिक दिहाड़ी (Expected Daily Wage ₹)
+            </label>
+            <div class="input-icon-wrapper">
+              <span class="input-icon">₹</span>
+              <input 
+                type="number" 
+                id="reg-wage" 
+                class="form-input input-with-icon" 
+                placeholder="उदा. 800" 
+                value="800" 
+                min="300" 
+                max="5000" 
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-accent btn-lg btn-block mt-4">
+            खाता बनाएं एवं काम खोजें (Register) &rarr;
+          </button>
+        </form>
+
+        <div class="switch-link">
+          क्या आप काम देने वाले (ठेकेदार/मालिक) हैं? <br>
+          <a href="employer-login.html">नियोक्ता पोर्टल पर जाएं (Employer Portal) &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="mobile-bottom-nav">
+    <a href="../index.html" class="bottom-nav-item">
+      <span class="nav-icon">🏠</span>
+      <span>होम</span>
+    </a>
+    <a href="job-search.html" class="bottom-nav-item">
+      <span class="nav-icon">🔎</span>
+      <span>काम खोजें</span>
+    </a>
+    <a href="worker-dashboard.html" id="bottom-nav-dashboard" class="bottom-nav-item active">
+      <span class="nav-icon">📊</span>
+      <span>डैशबोर्ड</span>
+    </a>
+    <a href="worker-profile.html" id="bottom-nav-profile" class="bottom-nav-item">
+      <span class="nav-icon">👤</span>
+      <span>प्रोफाइल</span>
+    </a>
+  </nav>
+
+  <!-- Scripts -->
+  <script src="../js/storage.js"></script>
+  <script src="../js/toast.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/jobs.js"></script>
+  <script src="../js/main.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // If already logged in as worker, redirect to dashboard
+      const session = AuthManager.getSession();
+      if (session && session.role === 'worker') {
+        window.location.href = 'worker-dashboard.html';
+        return;
+      }
+
+      // Tab toggle handling
+      const tabLogin = document.getElementById('tab-login');
+      const tabSignup = document.getElementById('tab-signup');
+      const formLogin = document.getElementById('form-worker-login');
+      const formSignup = document.getElementById('form-worker-signup');
+
+      tabLogin.addEventListener('click', () => {
+        tabLogin.classList.add('active');
+        tabLogin.setAttribute('aria-selected', 'true');
+        tabSignup.classList.remove('active');
+        tabSignup.setAttribute('aria-selected', 'false');
+        formLogin.classList.add('active');
+        formSignup.classList.remove('active');
+      });
+
+      tabSignup.addEventListener('click', () => {
+        tabSignup.classList.add('active');
+        tabSignup.setAttribute('aria-selected', 'true');
+        tabLogin.classList.remove('active');
+        tabLogin.setAttribute('aria-selected', 'false');
+        formSignup.classList.add('active');
+        formLogin.classList.remove('active');
+      });
+
+      // Quick Demo Worker Login Button
+      document.getElementById('btn-demo-worker').addEventListener('click', () => {
+        const worker = AuthManager.demoWorkerLogin();
+        if (worker) {
+          showToast(`स्वागत है ${worker.name}! (Demo Worker Login Success)`, 'success');
+          setTimeout(() => {
+            window.location.href = 'worker-dashboard.html';
+          }, 600);
+        } else {
+          showToast('डेमो उपयोगकर्ता नहीं मिला, कृपया डेटा रीसेट करें।', 'error');
+        }
+      });
+
+      // Handle Login Submit
+      formLogin.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const phone = document.getElementById('login-phone').value.trim();
+        const password = document.getElementById('login-password').value;
+
+        // Reset errors
+        document.getElementById('grp-login-phone').classList.remove('has-error');
+        document.getElementById('grp-login-password').classList.remove('has-error');
+
+        let hasError = false;
+        if (!AuthManager.isValidPhone(phone)) {
+          document.getElementById('grp-login-phone').classList.add('has-error');
+          hasError = true;
+        }
+        if (!password) {
+          document.getElementById('grp-login-password').classList.add('has-error');
+          hasError = true;
+        }
+
+        if (hasError) return;
+
+        const res = AuthManager.login(phone, password, 'worker');
+        if (res.success) {
+          showToast(`स्वागत है, ${res.user.name}!`, 'success');
+          setTimeout(() => {
+            window.location.href = 'worker-dashboard.html';
+          }, 600);
+        } else {
+          showToast(res.message, 'error');
+        }
+      });
+
+      // Handle Sign Up Submit
+      formSignup.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('reg-name').value.trim();
+        const phone = document.getElementById('reg-phone').value.trim();
+        const password = document.getElementById('reg-password').value;
+        const primarySkill = document.getElementById('reg-skill').value;
+        const location = document.getElementById('reg-location').value;
+        const experience = document.getElementById('reg-experience').value;
+        const dailyWage = document.getElementById('reg-wage').value;
+
+        // Reset error classes
+        ['name', 'phone', 'password', 'skill', 'location'].forEach(field => {
+          document.getElementById(`grp-reg-${field}`).classList.remove('has-error');
+        });
+
+        let hasError = false;
+        if (!name) {
+          document.getElementById('grp-reg-name').classList.add('has-error');
+          hasError = true;
+        }
+        if (!AuthManager.isValidPhone(phone)) {
+          document.getElementById('grp-reg-phone').classList.add('has-error');
+          hasError = true;
+        }
+        if (!password || password.length < 4) {
+          document.getElementById('grp-reg-password').classList.add('has-error');
+          hasError = true;
+        }
+        if (!primarySkill) {
+          document.getElementById('grp-reg-skill').classList.add('has-error');
+          hasError = true;
+        }
+        if (!location) {
+          document.getElementById('grp-reg-location').classList.add('has-error');
+          hasError = true;
+        }
+
+        if (hasError) return;
+
+        const res = AuthManager.registerWorker({
+          name, phone, password, primarySkill, location, experience, dailyWage
+        });
+
+        if (res.success) {
+          showToast('पंजीकरण सफल! आपका श्रमिक खाता तैयार है।', 'success');
+          setTimeout(() => {
+            window.location.href = 'worker-dashboard.html';
+          }, 800);
+        } else {
+          showToast(res.message, 'error');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

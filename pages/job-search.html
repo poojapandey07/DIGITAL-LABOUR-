@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>काम खोजें एवं दैनिक रोजगार | Digital Labor Chowk</title>
+  
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#0b2545">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="../assets/icons/emblem.svg">
+  
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+
+  <style>
+    .search-hero {
+      background: linear-gradient(135deg, #0b2545 0%, #133b68 100%);
+      color: #ffffff;
+      padding: 32px 0;
+      margin-bottom: 24px;
+    }
+    .search-bar-wrap {
+      display: flex;
+      gap: 10px;
+      max-width: 720px;
+      margin: 16px auto 0;
+    }
+    .search-main-input {
+      flex: 1;
+      height: 52px;
+      border-radius: var(--radius-sm);
+      border: none;
+      padding: 0 16px;
+      font-size: var(--font-size-base);
+      font-family: inherit;
+      box-shadow: var(--shadow-sm);
+    }
+    .search-main-input:focus {
+      outline: 3px solid var(--accent-saffron);
+    }
+    .filter-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .filter-section-title {
+      font-size: var(--font-size-sm);
+      font-weight: 700;
+      color: var(--primary-navy);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .wage-range-display {
+      display: flex;
+      justify-content: space-between;
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      color: var(--primary-navy);
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Tricolor Top Stripe -->
+  <div class="gov-stripe"></div>
+
+  <!-- Gov Banner -->
+  <div class="gov-banner">
+    <div class="container">
+      <div class="gov-banner-text">
+        <span class="gov-flag">🇮🇳</span>
+        <span>श्रम एवं रोजगार मंत्रालय | राष्ट्रीय दैनिक कार्य बाजार</span>
+      </div>
+      <div>
+        <span>डिजिटल लेबर चौक</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Site Navigation Header -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="../index.html" class="brand-link">
+          <div class="brand-emblem" aria-hidden="true">🏛️</div>
+          <div class="brand-text">
+            <span class="brand-title">डिजिटल <span>लेबर चौक</span></span>
+            <span class="brand-sub">Job Search &amp; Connect</span>
+          </div>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="../index.html" class="nav-link">🏠 होम (Home)</a></li>
+          <li><a href="job-search.html" class="nav-link active">🔎 काम खोजें (Search Jobs)</a></li>
+          <li><a href="worker-login.html" class="nav-link">👷 श्रमिक (Worker)</a></li>
+          <li><a href="employer-login.html" class="nav-link">🏢 नियोक्ता (Employer)</a></li>
+        </ul>
+
+        <div id="nav-auth-container" class="nav-auth"></div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Search Hero Banner -->
+  <div class="search-hero">
+    <div class="container text-center">
+      <h1 style="font-size:2rem; font-weight:800; color:#ffffff;">
+        🔎 दैनिक कार्य एवं नौकरियां खोजें
+      </h1>
+      <p style="color:#cbd5e1; font-size:14px; margin-top:4px;">
+        अपने शहर में राजमिस्त्री, प्लंबर, इलेक्ट्रीशियन, बढ़ई व लेबर के लिए काम खोजें
+      </p>
+
+      <form id="form-keyword-search" class="search-bar-wrap">
+        <input 
+          type="text" 
+          id="search-keyword" 
+          class="search-main-input" 
+          placeholder="कार्य का नाम, ट्रेड या इलाका खोजें (e.g. Mason, Painting, Okhla)..." 
+        />
+        <button type="submit" class="btn btn-accent" style="height:52px; padding: 0 24px;">
+          खोजें (Search)
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main Content Layout: Sidebar Filters + Jobs Grid -->
+  <main>
+    <div class="container">
+      
+      <!-- Mobile Filter Toggle Button -->
+      <div class="mb-4 filter-toggle-mobile">
+        <button type="button" id="btn-toggle-mobile-filters" class="btn btn-outline btn-block">
+          ⚙️ फ़िल्टर सेट करें (Filters) &darr;
+        </button>
+      </div>
+
+      <div class="search-layout">
+        <!-- 1. FILTER SIDEBAR -->
+        <aside class="filter-sidebar">
+          <div class="filter-card">
+            <div class="flex justify-between items-center mb-4">
+              <h2 style="font-size:1.15rem; font-weight:700; color:var(--primary-navy);">
+                फ़िल्टर (Filters)
+              </h2>
+              <button type="button" id="btn-reset-filters" class="btn btn-outline btn-sm" style="font-size:11px; padding:4px 8px; min-height:auto;">
+                रीसेट (Reset)
+              </button>
+            </div>
+
+            <div class="filter-content-collapsible" id="filter-container">
+              <!-- Filter: Trade / Category -->
+              <div class="form-group">
+                <label class="filter-section-title" for="filter-category">
+                  ट्रेड / कौशल (Category)
+                </label>
+                <select id="filter-category" class="form-select">
+                  <option value="all">सभी ट्रेड (All Categories)</option>
+                  <option value="mason">🧱 राजमिस्त्री (Mason)</option>
+                  <option value="electrician">⚡ इलेक्ट्रीशियन (Electrician)</option>
+                  <option value="plumber">🔧 प्लंबर (Plumber)</option>
+                  <option value="carpenter">🪚 बढ़ई (Carpenter)</option>
+                  <option value="painter">🎨 पेंटर (Painter)</option>
+                  <option value="welder">🔥 वेल्डर (Welder)</option>
+                  <option value="tile">🏛️ टाइल कारीगर (Tile Worker)</option>
+                  <option value="labor">👷 मजदूर / हेल्पर (General Labor)</option>
+                </select>
+              </div>
+
+              <!-- Filter: Location / City -->
+              <div class="form-group">
+                <label class="filter-section-title" for="filter-location">
+                  शहर / स्थान (Location)
+                </label>
+                <select id="filter-location" class="form-select">
+                  <option value="all">सभी शहर (All Locations)</option>
+                  <option value="Delhi">नई दिल्ली (New Delhi)</option>
+                  <option value="Noida">नोएडा (Noida)</option>
+                  <option value="Gurugram">गुरुग्राम (Gurugram)</option>
+                  <option value="Jaipur">जयपुर (Jaipur)</option>
+                  <option value="Lucknow">लखनऊ (Lucknow)</option>
+                  <option value="Mumbai">मुंबई (Mumbai)</option>
+                  <option value="Bengaluru">बेंगलुरु (Bengaluru)</option>
+                  <option value="Patna">पटना (Patna)</option>
+                </select>
+              </div>
+
+              <!-- Filter: Wage Slider -->
+              <div class="form-group">
+                <label class="filter-section-title" for="filter-min-wage">
+                  न्यूनतम दैनिक मजदूरी (Min Daily Wage)
+                </label>
+                <input 
+                  type="range" 
+                  id="filter-min-wage" 
+                  min="0" 
+                  max="1500" 
+                  step="50" 
+                  value="0" 
+                  style="width:100%; accent-color:var(--accent-saffron); cursor:pointer;" 
+                />
+                <div class="wage-range-display">
+                  <span>₹0</span>
+                  <span id="wage-current-value" style="color:var(--national-green); font-size:14px;">₹0 / दिन से शुरू</span>
+                  <span>₹1,500+</span>
+                </div>
+              </div>
+
+              <!-- Filter: Duration -->
+              <div class="form-group">
+                <label class="filter-section-title" for="filter-duration">
+                  कार्य अवधि (Duration)
+                </label>
+                <select id="filter-duration" class="form-select">
+                  <option value="all">सभी अवधि (Any Duration)</option>
+                  <option value="one-day">1 दिन का कार्य (1 Day)</option>
+                  <option value="multi-day">कुछ दिन (Multi-day)</option>
+                  <option value="ongoing">दीर्घकालिक (Ongoing)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- 2. JOB RESULTS FEED -->
+        <section>
+          <!-- Results Header & Sort Options -->
+          <div class="flex justify-between items-center mb-4" style="flex-wrap: wrap; gap: 12px;">
+            <div>
+              <span id="results-count-text" style="font-weight:700; color:var(--primary-navy); font-size:1.1rem;">
+                उपलब्ध कार्य खोज रहे हैं...
+              </span>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <label for="sort-select" style="font-size:var(--font-size-sm); font-weight:600; color:var(--text-muted); white-space:nowrap;">
+                क्रमबद्ध करें:
+              </label>
+              <select id="sort-select" class="form-select" style="min-height:38px; padding:6px 32px 6px 12px; font-size:var(--font-size-sm);">
+                <option value="newest">नवीनतम कार्य (Newest First)</option>
+                <option value="wage_high">अधिकतम दिहाड़ी (Wage: High to Low)</option>
+                <option value="wage_low">न्यूनतम दिहाड़ी (Wage: Low to High)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Job Cards Grid -->
+          <div id="jobs-results-container" class="flex flex-col gap-4">
+            <!-- Dynamically populated -->
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="mobile-bottom-nav">
+    <a href="../index.html" class="bottom-nav-item">
+      <span class="nav-icon">🏠</span>
+      <span>होम</span>
+    </a>
+    <a href="job-search.html" class="bottom-nav-item active">
+      <span class="nav-icon">🔎</span>
+      <span>काम खोजें</span>
+    </a>
+    <a href="worker-dashboard.html" id="bottom-nav-dashboard" class="bottom-nav-item">
+      <span class="nav-icon">📊</span>
+      <span>डैशबोर्ड</span>
+    </a>
+    <a href="worker-profile.html" id="bottom-nav-profile" class="bottom-nav-item">
+      <span class="nav-icon">👤</span>
+      <span>प्रोफाइल</span>
+    </a>
+  </nav>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>&copy; 2026 डिजिटल लेबर चौक | रोजगार सुगमता मंच</div>
+        <div class="footer-tools">
+          <button type="button" id="btn-reset-demo-data" class="btn btn-outline-white btn-sm">
+            🔄 रीसेट डेमो डेटा
+          </button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../js/storage.js"></script>
+  <script src="../js/toast.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/jobs.js"></script>
+  <script src="../js/main.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Parse URL search params (e.g. ?category=mason)
+      const urlParams = new URLSearchParams(window.location.search);
+      const initialCategory = urlParams.get('category');
+      const initialKeyword = urlParams.get('keyword');
+
+      if (initialCategory) {
+        const catSelect = document.getElementById('filter-category');
+        if (catSelect) {
+          catSelect.value = initialCategory;
+        }
+      }
+      if (initialKeyword) {
+        document.getElementById('search-keyword').value = initialKeyword;
+      }
+
+      // Initial Search Run
+      applyFilters();
+
+      // Keyword Form Submit
+      document.getElementById('form-keyword-search').addEventListener('submit', (e) => {
+        e.preventDefault();
+        applyFilters();
+      });
+
+      // Filter Inputs change
+      ['filter-category', 'filter-location', 'filter-duration', 'sort-select'].forEach(id => {
+        document.getElementById(id).addEventListener('change', applyFilters);
+      });
+
+      // Wage Range Slider change & input
+      const wageSlider = document.getElementById('filter-min-wage');
+      const wageDisplay = document.getElementById('wage-current-value');
+      wageSlider.addEventListener('input', () => {
+        wageDisplay.textContent = `₹${wageSlider.value} / दिन से शुरू`;
+      });
+      wageSlider.addEventListener('change', applyFilters);
+
+      // Reset Filters
+      document.getElementById('btn-reset-filters').addEventListener('click', () => {
+        document.getElementById('search-keyword').value = '';
+        document.getElementById('filter-category').value = 'all';
+        document.getElementById('filter-location').value = 'all';
+        document.getElementById('filter-duration').value = 'all';
+        document.getElementById('filter-min-wage').value = '0';
+        wageDisplay.textContent = '₹0 / दिन से शुरू';
+        document.getElementById('sort-select').value = 'newest';
+        applyFilters();
+        showToast('फ़िल्टर रीसेट किए गए (Filters Reset)', 'info');
+      });
+
+      // Mobile Filters Toggle
+      const mobileToggleBtn = document.getElementById('btn-toggle-mobile-filters');
+      const filterCollapsible = document.getElementById('filter-container');
+      if (mobileToggleBtn && filterCollapsible) {
+        mobileToggleBtn.addEventListener('click', () => {
+          filterCollapsible.classList.toggle('open');
+          const isOpen = filterCollapsible.classList.contains('open');
+          mobileToggleBtn.innerHTML = isOpen 
+            ? '▲ फ़िल्टर छुपाएं (Hide Filters)' 
+            : '⚙️ फ़िल्टर सेट करें (Show Filters) &darr;';
+        });
+      }
+    });
+
+    function applyFilters() {
+      const keyword = document.getElementById('search-keyword').value.trim();
+      const category = document.getElementById('filter-category').value;
+      const location = document.getElementById('filter-location').value;
+      const minWage = parseInt(document.getElementById('filter-min-wage').value, 10);
+      const duration = document.getElementById('filter-duration').value;
+      const sortBy = document.getElementById('sort-select').value;
+
+      const jobs = JobManager.filterJobs({
+        keyword,
+        category,
+        location,
+        minWage,
+        duration,
+        sortBy
+      });
+
+      renderFilteredJobs(jobs);
+    }
+
+    function renderFilteredJobs(jobs) {
+      const container = document.getElementById('jobs-results-container');
+      const countText = document.getElementById('results-count-text');
+      const session = AuthManager.getSession();
+
+      countText.textContent = `कुल ${jobs.length} कार्य उपलब्ध (${jobs.length} Jobs Found)`;
+
+      if (jobs.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <div class="empty-title">आपके फ़िल्टर से मेल खाता कोई कार्य नहीं मिला</div>
+            <div class="empty-desc">कृपया अलग कीवर्ड, ट्रेड या स्थान चुनकर पुनः प्रयास करें या फ़िल्टर रीसेट करें।</div>
+            <button type="button" class="btn btn-accent btn-sm" onclick="document.getElementById('btn-reset-filters').click();">
+              फ़िल्टर रीसेट करें (Reset Filters)
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = jobs.map(job => {
+        const hasApplied = session && session.role === 'worker' 
+          ? JobManager.hasWorkerApplied(job.id, session.userId) 
+          : false;
+
+        return createJobCardHTML(job, hasApplied, true);
+      }).join('');
+
+      // Wire up Apply buttons
+      container.querySelectorAll('.btn-apply-job').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const jobId = e.target.getAttribute('data-job-id');
+          const currentWorker = AuthManager.getCurrentUser();
+
+          if (!currentWorker || currentWorker.role !== 'worker') {
+            showToast('कृपया पहले श्रमिक के रूप में लॉगिन करें (Worker login required)', 'warning');
+            setTimeout(() => {
+              window.location.href = 'worker-login.html';
+            }, 1000);
+            return;
+          }
+
+          const res = JobManager.applyForJob(jobId, currentWorker);
+          if (res.success) {
+            showToast('सफलतापूर्वक आवेदन भेजा गया! (Application Sent)', 'success');
+            e.target.outerHTML = '<button class="btn btn-sm btn-outline disabled" disabled>✓ आवेदन किया (Applied)</button>';
+          } else {
+            showToast(res.message, 'warning');
+          }
+        });
+      });
+    }
+  </script>
+</body>
+</html>

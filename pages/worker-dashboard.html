@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>श्रमिक डैशबोर्ड | Digital Labor Chowk</title>
+  
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#0b2545">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="../assets/icons/emblem.svg">
+
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+
+  <style>
+    .worker-welcome-banner {
+      background: linear-gradient(135deg, #0b2545 0%, #133b68 100%);
+      color: #ffffff;
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .worker-identity {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .worker-avatar-large {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-saffron), #e65100);
+      color: #0b2545;
+      font-size: 26px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #ffffff;
+      flex-shrink: 0;
+    }
+    .worker-meta-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 4px;
+      font-size: var(--font-size-sm);
+      color: #cbd5e1;
+      flex-wrap: wrap;
+    }
+    .applications-table-wrapper {
+      overflow-x: auto;
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+    }
+    .applications-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: var(--font-size-sm);
+    }
+    .applications-table th {
+      background-color: #f8fafc;
+      padding: 14px 16px;
+      font-weight: 700;
+      color: var(--primary-navy);
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+    .applications-table td {
+      padding: 16px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+      vertical-align: middle;
+    }
+    .applications-table tr:last-child td {
+      border-bottom: none;
+    }
+    .applications-table tr:hover {
+      background-color: #fafbfc;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Tricolor Top Stripe -->
+  <div class="gov-stripe"></div>
+
+  <!-- Gov Banner -->
+  <div class="gov-banner">
+    <div class="container">
+      <div class="gov-banner-text">
+        <span class="gov-flag">🇮🇳</span>
+        <span>श्रम एवं रोजगार मंत्रालय | श्रमिक सेवा डैशबोर्ड</span>
+      </div>
+      <div>
+        <span>डिजिटल लेबर चौक</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="../index.html" class="brand-link">
+          <div class="brand-emblem" aria-hidden="true">🏛️</div>
+          <div class="brand-text">
+            <span class="brand-title">डिजिटल <span>लेबर चौक</span></span>
+            <span class="brand-sub">Worker Dashboard</span>
+          </div>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="../index.html" class="nav-link">🏠 होम (Home)</a></li>
+          <li><a href="job-search.html" class="nav-link">🔎 काम खोजें (Search Jobs)</a></li>
+          <li><a href="worker-dashboard.html" class="nav-link active">📊 डैशबोर्ड (Dashboard)</a></li>
+          <li><a href="worker-profile.html" class="nav-link">👤 मेरी प्रोफाइल (Profile)</a></li>
+        </ul>
+
+        <div id="nav-auth-container" class="nav-auth"></div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <main class="mt-4">
+    <div class="container">
+      <!-- Worker Welcome Banner -->
+      <div class="worker-welcome-banner">
+        <div class="worker-identity">
+          <div class="worker-avatar-large" id="dash-avatar">R</div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 id="dash-worker-name" style="font-size:1.4rem; font-weight:800; color:#ffffff;">
+                नमस्ते, श्रमिक साथी!
+              </h1>
+              <span class="badge badge-green" style="font-size:11px;">🟢 उपलब्ध</span>
+            </div>
+            <div class="worker-meta-line">
+              <span id="dash-worker-skill">🧱 राजमिस्त्री</span>
+              <span>•</span>
+              <span id="dash-worker-location">📍 नई दिल्ली</span>
+              <span>•</span>
+              <span id="dash-worker-phone">📱 9876543210</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-2">
+          <a href="worker-profile.html" class="btn btn-outline-white btn-sm">
+            ✏️ प्रोफाइल
+          </a>
+          <a href="job-search.html" class="btn btn-accent btn-sm">
+            🔎 काम ढूंढें
+          </a>
+        </div>
+      </div>
+
+      <!-- 3 Summary Metric Cards -->
+      <div class="dashboard-grid mb-6">
+        <!-- Metric 1: Applications Sent -->
+        <div class="metric-card">
+          <div class="metric-icon-box">📤</div>
+          <div class="metric-info">
+            <div class="metric-value" id="metric-apps-count">0</div>
+            <div class="metric-label">कुल आवेदन (Applications)</div>
+          </div>
+        </div>
+
+        <!-- Metric 2: Matching Jobs -->
+        <div class="metric-card accent-navy">
+          <div class="metric-icon-box">🎯</div>
+          <div class="metric-info">
+            <div class="metric-value" id="metric-matched-jobs">0</div>
+            <div class="metric-label">हुनर अनुसार काम (Matching)</div>
+          </div>
+        </div>
+
+        <!-- Metric 3: Profile Completion -->
+        <div class="metric-card accent-green">
+          <div class="metric-icon-box">⭐</div>
+          <div class="metric-info">
+            <div class="metric-value" id="metric-profile-pct">85%</div>
+            <div class="metric-label">प्रोफाइल स्कोर (Profile)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Recommended Jobs for Worker -->
+      <div class="mb-6">
+        <div class="flex justify-between items-center mb-4" style="flex-wrap: wrap; gap: 8px;">
+          <div>
+            <h2 class="card-title" style="font-size:1.35rem;">
+              🎯 अनुशंसित कार्य (Recommended Jobs)
+            </h2>
+            <p class="text-muted" style="font-size:var(--font-size-xs);">
+              आपके ट्रेड एवं शहर के अनुसार सबसे उपयुक्त नौकरियां
+            </p>
+          </div>
+          <a href="job-search.html" class="btn btn-outline btn-sm">
+            सभी काम देखें &rarr;
+          </a>
+        </div>
+
+        <div class="grid-2" id="recommended-jobs-grid">
+          <!-- Filled dynamically -->
+        </div>
+      </div>
+
+      <!-- Section: My Applications Tracker (Dual View: Table on Desktop, Cards on Mobile) -->
+      <div class="mb-6">
+        <div class="flex justify-between items-center mb-4">
+          <div>
+            <h2 class="card-title" style="font-size:1.35rem;">
+              📋 मेरे द्वारा किए गए आवेदन (My Applied Jobs)
+            </h2>
+            <p class="text-muted" style="font-size:var(--font-size-xs);">
+              आपके आवेदन एवं साक्षात्कार की स्थिति
+            </p>
+          </div>
+        </div>
+
+        <!-- 1. Desktop / Tablet View (Table) -->
+        <div class="desktop-only-view">
+          <div class="applications-table-wrapper">
+            <table class="applications-table" id="applied-jobs-table">
+              <thead>
+                <tr>
+                  <th>कार्य / शीर्षक (Job Title)</th>
+                  <th>नियोक्ता (Employer)</th>
+                  <th>दैनिक मजदूरी (Daily Wage)</th>
+                  <th>आवेदन दिनांक (Date)</th>
+                  <th>स्थिति (Status)</th>
+                  <th>संपर्क (Action)</th>
+                </tr>
+              </thead>
+              <tbody id="applied-jobs-tbody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 2. Mobile View (High-Contrast Touch Cards) -->
+        <div class="mobile-only-view" id="applied-jobs-mobile-cards">
+          <!-- Dynamically populated for phones -->
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="mobile-bottom-nav">
+    <a href="../index.html" class="bottom-nav-item">
+      <span class="nav-icon">🏠</span>
+      <span>होम</span>
+    </a>
+    <a href="job-search.html" class="bottom-nav-item">
+      <span class="nav-icon">🔎</span>
+      <span>काम खोजें</span>
+    </a>
+    <a href="worker-dashboard.html" id="bottom-nav-dashboard" class="bottom-nav-item active">
+      <span class="nav-icon">📊</span>
+      <span>डैशबोर्ड</span>
+    </a>
+    <a href="worker-profile.html" id="bottom-nav-profile" class="bottom-nav-item">
+      <span class="nav-icon">👤</span>
+      <span>प्रोफाइल</span>
+    </a>
+  </nav>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>&copy; 2026 डिजिटल लेबर चौक | श्रमिक सहायता प्रकोष्ठ</div>
+        <div class="footer-tools">
+          <button type="button" class="btn btn-outline-white btn-sm btn-reset-demo-data">
+            🔄 रीसेट डेमो डेटा
+          </button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../js/storage.js"></script>
+  <script src="../js/toast.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/jobs.js"></script>
+  <script src="../js/main.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Auth Guard
+      const isAuthorized = AuthManager.requireAuth('worker', 'worker-login.html');
+      if (!isAuthorized) return;
+
+      const worker = AuthManager.getCurrentUser();
+      if (!worker) return;
+
+      // Populate Worker Welcome Info
+      document.getElementById('dash-worker-name').textContent = `नमस्ते, ${worker.name}!`;
+      document.getElementById('dash-avatar').textContent = worker.name ? worker.name.charAt(0).toUpperCase() : 'W';
+      document.getElementById('dash-worker-skill').textContent = `🛠️ ${worker.primarySkill || 'मजदूर'}`;
+      document.getElementById('dash-worker-location').textContent = `📍 ${worker.location || 'भारत'}`;
+      document.getElementById('dash-worker-phone').textContent = `📱 ${worker.phone}`;
+
+      // Calculate Profile Completion %
+      let fieldsCompleted = 0;
+      const totalFields = 6;
+      if (worker.name) fieldsCompleted++;
+      if (worker.phone) fieldsCompleted++;
+      if (worker.primarySkill) fieldsCompleted++;
+      if (worker.location) fieldsCompleted++;
+      if (worker.experience) fieldsCompleted++;
+      if (worker.bio) fieldsCompleted++;
+      const profilePct = Math.round((fieldsCompleted / totalFields) * 100);
+      document.getElementById('metric-profile-pct').textContent = `${profilePct}%`;
+
+      // Fetch Applications
+      renderWorkerApplications(worker.id);
+
+      // Fetch Matching Jobs
+      renderRecommendedJobs(worker);
+    });
+
+    function renderWorkerApplications(workerId) {
+      const tbody = document.getElementById('applied-jobs-tbody');
+      const mobileCardsContainer = document.getElementById('applied-jobs-mobile-cards');
+      const apps = JobManager.getApplicationsForWorker(workerId);
+      
+      document.getElementById('metric-apps-count').textContent = apps.length;
+
+      if (apps.length === 0) {
+        const emptyHTML = `
+          <div class="empty-state" style="padding: 28px;">
+            <div class="empty-icon" style="font-size:32px;">📭</div>
+            <div class="empty-title">कोई आवेदन नहीं मिला</div>
+            <p class="empty-desc">आपने अभी तक किसी काम के लिए आवेदन नहीं किया है।</p>
+            <a href="job-search.html" class="btn btn-accent btn-sm mt-2">काम खोजें और आवेदन करें</a>
+          </div>
+        `;
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center" style="padding: 24px;">${emptyHTML}</td></tr>`;
+        mobileCardsContainer.innerHTML = emptyHTML;
+        return;
+      }
+
+      // Render Desktop Table Rows
+      tbody.innerHTML = apps.map(app => {
+        const { badgeClass, statusHindi } = getStatusBadgeInfo(app.status);
+        const dateStr = new Date(app.appliedAt).toLocaleDateString('hi-IN', {
+          day: 'numeric', month: 'short', year: 'numeric'
+        });
+        const wageDisplay = app.job && app.job.wage ? `₹${app.job.wage}/दिन` : '—';
+        const contactBtn = (app.status === 'Shortlisted' || app.status === 'Selected')
+          ? `<a href="tel:${app.job.contactPhone || '9876543210'}" class="btn btn-success btn-sm">📞 कॉल करें</a>`
+          : `<span class="text-muted" style="font-size:12px;">समीक्षाधीन</span>`;
+
+        return `
+          <tr>
+            <td>
+              <strong>${escapeHTML(app.jobTitle || (app.job && app.job.title))}</strong>
+              <div class="text-muted" style="font-size:11px;">📍 ${escapeHTML(app.job ? app.job.location : '')}</div>
+            </td>
+            <td>${escapeHTML(app.employerName || (app.job && app.job.employerName))}</td>
+            <td><strong style="color:var(--national-green);">${wageDisplay}</strong></td>
+            <td>${dateStr}</td>
+            <td><span class="badge ${badgeClass}">${statusHindi}</span></td>
+            <td>${contactBtn}</td>
+          </tr>
+        `;
+      }).join('');
+
+      // Render Mobile Touch Cards
+      mobileCardsContainer.innerHTML = apps.map(app => {
+        const { badgeClass, statusHindi } = getStatusBadgeInfo(app.status);
+        const dateStr = new Date(app.appliedAt).toLocaleDateString('hi-IN', {
+          day: 'numeric', month: 'short'
+        });
+        const wageDisplay = app.job && app.job.wage ? `₹${app.job.wage} / दिन` : '—';
+        const isSelected = app.status === 'Shortlisted' || app.status === 'Selected';
+
+        return `
+          <div class="mobile-app-card">
+            <div class="mobile-app-card-header">
+              <div>
+                <h3 class="mobile-app-card-title">${escapeHTML(app.jobTitle || (app.job && app.job.title))}</h3>
+                <div class="text-muted" style="font-size:12px; margin-top:2px;">
+                  🏢 ${escapeHTML(app.employerName || (app.job && app.job.employerName))}
+                </div>
+              </div>
+              <span class="badge ${badgeClass}">${statusHindi}</span>
+            </div>
+
+            <div class="mobile-app-card-meta">
+              <span>📍 ${escapeHTML(app.job ? app.job.location : '')}</span>
+              <span>💰 <strong style="color:var(--national-green);">${wageDisplay}</strong></span>
+              <span>📅 ${dateStr}</span>
+            </div>
+
+            <div class="mobile-app-card-footer">
+              <span style="font-size:11px; color:var(--text-muted);">
+                ${isSelected ? 'ठेकेदार से सीधे संपर्क करें:' : 'आवेदन समीक्षा में है'}
+              </span>
+              ${isSelected ? `
+                <a href="tel:${app.job.contactPhone || '9876543210'}" class="btn btn-success btn-sm">
+                  📞 ठेकेदार को कॉल करें
+                </a>
+              ` : `
+                <button class="btn btn-outline btn-sm disabled" disabled>समीक्षाधीन</button>
+              `}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function getStatusBadgeInfo(status) {
+      if (status === 'Shortlisted') {
+        return { badgeClass: 'badge-status-shortlisted', statusHindi: '⭐ शॉर्टलिस्ट' };
+      } else if (status === 'Viewed') {
+        return { badgeClass: 'badge-status-viewed', statusHindi: '👀 देखा गया' };
+      } else if (status === 'Selected') {
+        return { badgeClass: 'badge-status-selected', statusHindi: '🎉 चयनित' };
+      }
+      return { badgeClass: 'badge-status-applied', statusHindi: 'आवेदन भेजा' };
+    }
+
+    function renderRecommendedJobs(worker) {
+      const container = document.getElementById('recommended-jobs-grid');
+      const jobs = JobManager.getRecommendedJobs(worker, 4);
+
+      document.getElementById('metric-matched-jobs').textContent = jobs.length;
+
+      if (jobs.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            <div class="empty-icon">🔍</div>
+            <div class="empty-title">फिलहाल कोई नया काम उपलब्ध नहीं है</div>
+            <div class="empty-desc">कृपया जॉब सर्च पेज पर अन्य शहरों एवं श्रेणियों में काम देखें।</div>
+            <a href="job-search.html" class="btn btn-primary btn-sm">सभी काम देखें</a>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = jobs.map(job => {
+        const hasApplied = JobManager.hasWorkerApplied(job.id, worker.id);
+        return createJobCardHTML(job, hasApplied, true);
+      }).join('');
+
+      // Wire up apply buttons
+      container.querySelectorAll('.btn-apply-job').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const jobId = e.target.getAttribute('data-job-id');
+          const res = JobManager.applyForJob(jobId, worker);
+          if (res.success) {
+            showToast('सफलतापूर्वक आवेदन भेजा गया! (Application Submitted)', 'success');
+            e.target.outerHTML = '<button class="btn btn-sm btn-outline disabled" disabled>✓ आवेदन किया (Applied)</button>';
+            renderWorkerApplications(worker.id);
+          } else {
+            showToast(res.message, 'warning');
+          }
+        });
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>नियोक्ता लॉगिन एवं पंजीकरण | Digital Labor Chowk</title>
+  
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#0b2545">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="../assets/icons/emblem.svg">
+  
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  
+  <style>
+    .auth-container {
+      max-width: 540px;
+      margin: 40px auto;
+      padding: 0 16px;
+    }
+    .auth-card {
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-md);
+      padding: 32px 28px;
+    }
+    .auth-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .auth-icon-badge {
+      width: 56px;
+      height: 56px;
+      background: #e0f2fe;
+      color: var(--primary-navy);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+    .auth-title {
+      font-size: var(--font-size-2xl);
+      font-weight: 800;
+      color: var(--primary-navy);
+      margin-bottom: 4px;
+    }
+    .auth-subtitle {
+      font-size: var(--font-size-sm);
+      color: var(--text-muted);
+    }
+    .switch-link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: var(--font-size-sm);
+      color: var(--text-muted);
+    }
+    .switch-link a {
+      color: var(--accent-saffron-dark);
+      font-weight: 700;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Tricolor Top Stripe -->
+  <div class="gov-stripe"></div>
+
+  <!-- Gov Banner -->
+  <div class="gov-banner">
+    <div class="container">
+      <div class="gov-banner-text">
+        <span class="gov-flag">🇮🇳</span>
+        <span>श्रम एवं रोजगार मंत्रालय | Ministry of Labour &amp; Employment</span>
+      </div>
+      <div>
+        <span>नियोक्ता सेवा पोर्टल</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Site Navigation Header -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="../index.html" class="brand-link">
+          <div class="brand-emblem" aria-hidden="true">🏛️</div>
+          <div class="brand-text">
+            <span class="brand-title">डिजिटल <span>लेबर चौक</span></span>
+            <span class="brand-sub">Employer Portal</span>
+          </div>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="../index.html" class="nav-link">🏠 होम (Home)</a></li>
+          <li><a href="job-search.html" class="nav-link">🔎 काम खोजें (Search Jobs)</a></li>
+          <li><a href="worker-login.html" class="nav-link">👷 श्रमिक (Worker)</a></li>
+          <li><a href="employer-login.html" class="nav-link active">🏢 नियोक्ता (Employer)</a></li>
+        </ul>
+
+        <div id="nav-auth-container" class="nav-auth"></div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-header">
+          <div class="auth-icon-badge">🏢</div>
+          <h1 class="auth-title">नियोक्ता एवं ठेकेदार पोर्टल</h1>
+          <p class="auth-subtitle">कुशल श्रमिक, मिस्त्री एवं कारीगर सीधे साइट पर बुलाएं</p>
+        </div>
+
+        <!-- Quick 1-Click Demo Login Box -->
+        <div class="demo-login-box">
+          <p><strong>⚡ त्वरित परीक्षण (Quick Demo Test):</strong></p>
+          <button type="button" id="btn-demo-employer" class="btn btn-outline btn-sm btn-block" style="border-color:var(--primary-navy); font-weight:700;">
+            ⚡ शर्मा कंस्ट्रक्शन के रूप में सीधे लॉगिन करें (Demo Login)
+          </button>
+        </div>
+
+        <!-- Tabs: Login vs Register -->
+        <div class="tabs-header" role="tablist">
+          <button type="button" class="tab-btn active" id="tab-login" role="tab" aria-selected="true">
+            नियोक्ता लॉगिन (Sign In)
+          </button>
+          <button type="button" class="tab-btn" id="tab-signup" role="tab" aria-selected="false">
+            नया पंजीकरण (Sign Up)
+          </button>
+        </div>
+
+        <!-- 1. EMPLOYER LOGIN FORM -->
+        <form id="form-employer-login" class="tab-pane active" novalidate>
+          <div class="form-group" id="grp-login-phone">
+            <label class="form-label" for="login-phone">
+              पंजीकृत मोबाइल नंबर (Registered Mobile) <span class="req">*</span>
+            </label>
+            <div class="input-icon-wrapper">
+              <span class="input-icon">📱</span>
+              <input 
+                type="tel" 
+                id="login-phone" 
+                class="form-input input-with-icon" 
+                placeholder="उदा. 9899001122" 
+                maxlength="10" 
+                required 
+              />
+            </div>
+            <div class="form-error-msg" id="err-login-phone">कृपया 10 अंकों का मान्य मोबाइल नंबर दर्ज करें।</div>
+          </div>
+
+          <div class="form-group" id="grp-login-password">
+            <label class="form-label" for="login-password">
+              पासवर्ड (Password) <span class="req">*</span>
+            </label>
+            <div class="input-icon-wrapper">
+              <span class="input-icon">🔒</span>
+              <input 
+                type="password" 
+                id="login-password" 
+                class="form-input input-with-icon" 
+                placeholder="अपना पासवर्ड दर्ज करें" 
+                required 
+              />
+            </div>
+            <div class="form-error-msg" id="err-login-password">कृपया अपना पासवर्ड दर्ज करें।</div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg btn-block mt-4">
+            नियोक्ता पोर्टल में प्रवेश करें &rarr;
+          </button>
+        </form>
+
+        <!-- 2. EMPLOYER SIGN UP FORM -->
+        <form id="form-employer-signup" class="tab-pane" novalidate>
+          <div class="form-group" id="grp-reg-company">
+            <label class="form-label" for="reg-company">
+              कंपनी / फर्म या मालिक का नाम (Company / Name) <span class="req">*</span>
+            </label>
+            <div class="input-icon-wrapper">
+              <span class="input-icon">🏢</span>
+              <input 
+                type="text" 
+                id="reg-company" 
+                class="form-input input-with-icon" 
+                placeholder="उदा. शर्मा कंस्ट्रक्शन / Sharma Constructions" 
+                required 
+              />
+            </div>
+            <div class="form-error-msg" id="err-reg-company">कृपया कंपनी या नियोक्ता का नाम दर्ज करें।</div>
+          </div>
+
+          <div class="form-group" id="grp-reg-contact">
+            <label class="form-label" for="reg-contact">
+              संपर्क व्यक्ति (Contact Person Name)
+            </label>
+            <div class="input-icon-wrapper">
+              <span class="input-icon">👤</span>
+              <input 
+                type="text" 
+                id="reg-contact" 
+                class="form-input input-with-icon" 
+                placeholder="साइट इंचार्ज / सुपरवाइजर का नाम" 
+              />
+            </div>
+          </div>
+
+          <div class="form-group" id="grp-reg-phone">
+            <label class="form-label" for="reg-phone">
+              मोबाइल नंबर (10-Digit Mobile) <span class="req">*</span>
+            </label>
+            <div class="input-icon-wrapper">
+              <span class="input-icon">📱</span>
+              <input 
+                type="tel" 
+                id="reg-phone" 
+                class="form-input input-with-icon" 
+                placeholder="10 अंकों का मोबाइल नंबर" 
+                maxlength="10" 
+                required 
+              />
+            </div>
+            <div class="form-error-msg" id="err-reg-phone">कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें।</div>
+          </div>
+
+          <div class="form-group" id="grp-reg-password">
+            <label class="form-label" for="reg-password">
+              पासवर्ड बनाएं (Create Password) <span class="req">*</span>
+            </label>
+            <div class="input-icon-wrapper">
+              <span class="input-icon">🔒</span>
+              <input 
+                type="password" 
+                id="reg-password" 
+                class="form-input input-with-icon" 
+                placeholder="कम से कम 4 अक्षर या अंक" 
+                required 
+              />
+            </div>
+            <div class="form-error-msg" id="err-reg-password">पासवर्ड कम से कम 4 अक्षरों का होना चाहिए।</div>
+          </div>
+
+          <div class="form-row flex gap-3">
+            <div class="form-group" style="flex:1;" id="grp-reg-businesstype">
+              <label class="form-label" for="reg-businesstype">
+                कार्य क्षेत्र (Business Type) <span class="req">*</span>
+              </label>
+              <select id="reg-businesstype" class="form-select" required>
+                <option value="">-- प्रकार चुनें --</option>
+                <option value="Construction">भवन निर्माण (Construction)</option>
+                <option value="Household">घरेलू कार्य / मरम्मत (Household)</option>
+                <option value="Agriculture">कृषि कार्य (Agriculture)</option>
+                <option value="Manufacturing">कारखाना / फैक्ट्री (Manufacturing)</option>
+                <option value="Logistics">लॉजिस्टिक्स / ट्रांसपोर्ट (Logistics)</option>
+                <option value="Other">अन्य (Other)</option>
+              </select>
+              <div class="form-error-msg" id="err-reg-businesstype">कृपया व्यवसाय का प्रकार चुनें।</div>
+            </div>
+
+            <div class="form-group" style="flex:1;" id="grp-reg-location">
+              <label class="form-label" for="reg-location">
+                शहर / जिला (City) <span class="req">*</span>
+              </label>
+              <select id="reg-location" class="form-select" required>
+                <option value="">-- शहर चुनें --</option>
+                <option value="New Delhi / नई दिल्ली">नई दिल्ली (New Delhi)</option>
+                <option value="Noida / नोएडा">नोएडा (Noida)</option>
+                <option value="Gurugram / गुरुग्राम">गुरुग्राम (Gurugram)</option>
+                <option value="Jaipur / जयपुर">जयपुर (Jaipur)</option>
+                <option value="Lucknow / लखनऊ">लखनऊ (Lucknow)</option>
+                <option value="Mumbai / मुंबई">मुंबई (Mumbai)</option>
+                <option value="Bengaluru / बेंगलुरु">बेंगलुरु (Bengaluru)</option>
+                <option value="Patna / पटना">पटना (Patna)</option>
+              </select>
+              <div class="form-error-msg" id="err-reg-location">कृपया शहर चुनें।</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-address">
+              साइट / कार्यालय का पता (Site or Office Address)
+            </label>
+            <input 
+              type="text" 
+              id="reg-address" 
+              class="form-input" 
+              placeholder="उदा. सेक्टर 62, नोएडा / ओखला इंडस्ट्रियल एरिया" 
+            />
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg btn-block mt-4">
+            नियोक्ता खाता बनाएं (Create Employer Account) &rarr;
+          </button>
+        </form>
+
+        <div class="switch-link">
+          क्या आप काम ढूंढ रहे श्रमिक/कारीगर हैं? <br>
+          <a href="worker-login.html">श्रमिक साथी पोर्टल पर जाएं (Worker Portal) &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="mobile-bottom-nav">
+    <a href="../index.html" class="bottom-nav-item">
+      <span class="nav-icon">🏠</span>
+      <span>होम</span>
+    </a>
+    <a href="job-search.html" class="bottom-nav-item">
+      <span class="nav-icon">🔎</span>
+      <span>काम खोजें</span>
+    </a>
+    <a href="post-job.html" id="bottom-nav-dashboard" class="bottom-nav-item active">
+      <span class="nav-icon">📝</span>
+      <span>जॉब पोस्ट</span>
+    </a>
+    <a href="employer-login.html" id="bottom-nav-profile" class="bottom-nav-item">
+      <span class="nav-icon">🏢</span>
+      <span>नियोक्ता</span>
+    </a>
+  </nav>
+
+  <!-- Scripts -->
+  <script src="../js/storage.js"></script>
+  <script src="../js/toast.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/jobs.js"></script>
+  <script src="../js/main.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // If already logged in as employer, redirect to post-job
+      const session = AuthManager.getSession();
+      if (session && session.role === 'employer') {
+        window.location.href = 'post-job.html';
+        return;
+      }
+
+      // Tab toggle handling
+      const tabLogin = document.getElementById('tab-login');
+      const tabSignup = document.getElementById('tab-signup');
+      const formLogin = document.getElementById('form-employer-login');
+      const formSignup = document.getElementById('form-employer-signup');
+
+      tabLogin.addEventListener('click', () => {
+        tabLogin.classList.add('active');
+        tabLogin.setAttribute('aria-selected', 'true');
+        tabSignup.classList.remove('active');
+        tabSignup.setAttribute('aria-selected', 'false');
+        formLogin.classList.add('active');
+        formSignup.classList.remove('active');
+      });
+
+      tabSignup.addEventListener('click', () => {
+        tabSignup.classList.add('active');
+        tabSignup.setAttribute('aria-selected', 'true');
+        tabLogin.classList.remove('active');
+        tabLogin.setAttribute('aria-selected', 'false');
+        formSignup.classList.add('active');
+        formLogin.classList.remove('active');
+      });
+
+      // Demo Employer Login
+      document.getElementById('btn-demo-employer').addEventListener('click', () => {
+        const emp = AuthManager.demoEmployerLogin();
+        if (emp) {
+          showToast(`स्वागत है ${emp.name}! (Demo Employer Login Success)`, 'success');
+          setTimeout(() => {
+            window.location.href = 'post-job.html';
+          }, 600);
+        } else {
+          showToast('डेमो नियोक्ता डेटा नहीं मिला।', 'error');
+        }
+      });
+
+      // Handle Login
+      formLogin.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const phone = document.getElementById('login-phone').value.trim();
+        const password = document.getElementById('login-password').value;
+
+        document.getElementById('grp-login-phone').classList.remove('has-error');
+        document.getElementById('grp-login-password').classList.remove('has-error');
+
+        let hasError = false;
+        if (!AuthManager.isValidPhone(phone)) {
+          document.getElementById('grp-login-phone').classList.add('has-error');
+          hasError = true;
+        }
+        if (!password) {
+          document.getElementById('grp-login-password').classList.add('has-error');
+          hasError = true;
+        }
+
+        if (hasError) return;
+
+        const res = AuthManager.login(phone, password, 'employer');
+        if (res.success) {
+          showToast(`स्वागत है, ${res.user.name}!`, 'success');
+          setTimeout(() => {
+            window.location.href = 'post-job.html';
+          }, 600);
+        } else {
+          showToast(res.message, 'error');
+        }
+      });
+
+      // Handle Sign Up
+      formSignup.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const companyName = document.getElementById('reg-company').value.trim();
+        const contactPerson = document.getElementById('reg-contact').value.trim();
+        const phone = document.getElementById('reg-phone').value.trim();
+        const password = document.getElementById('reg-password').value;
+        const businessType = document.getElementById('reg-businesstype').value;
+        const location = document.getElementById('reg-location').value;
+        const address = document.getElementById('reg-address').value.trim();
+
+        ['company', 'phone', 'password', 'businesstype', 'location'].forEach(field => {
+          document.getElementById(`grp-reg-${field}`).classList.remove('has-error');
+        });
+
+        let hasError = false;
+        if (!companyName) {
+          document.getElementById('grp-reg-company').classList.add('has-error');
+          hasError = true;
+        }
+        if (!AuthManager.isValidPhone(phone)) {
+          document.getElementById('grp-reg-phone').classList.add('has-error');
+          hasError = true;
+        }
+        if (!password || password.length < 4) {
+          document.getElementById('grp-reg-password').classList.add('has-error');
+          hasError = true;
+        }
+        if (!businessType) {
+          document.getElementById('grp-reg-businesstype').classList.add('has-error');
+          hasError = true;
+        }
+        if (!location) {
+          document.getElementById('grp-reg-location').classList.add('has-error');
+          hasError = true;
+        }
+
+        if (hasError) return;
+
+        const res = AuthManager.registerEmployer({
+          companyName, contactPerson, phone, password, businessType, location, address
+        });
+
+        if (res.success) {
+          showToast('नियोक्ता पंजीकरण सफल! आप अब कार्य पोस्ट कर सकते हैं।', 'success');
+          setTimeout(() => {
+            window.location.href = 'post-job.html';
+          }, 800);
+        } else {
+          showToast(res.message, 'error');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

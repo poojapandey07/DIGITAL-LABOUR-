@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>नया कार्य पोस्ट करें | Digital Labor Chowk</title>
+  
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#0b2545">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="../assets/icons/emblem.svg">
+
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+
+  <style>
+    .employer-header-banner {
+      background: linear-gradient(135deg, #0b2545 0%, #133b68 100%);
+      color: #ffffff;
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .posted-job-item {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .applicant-item {
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: #f8fafc;
+    }
+    .applicant-info h4 {
+      font-size: var(--font-size-base);
+      color: var(--primary-navy);
+      margin-bottom: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Tricolor Top Stripe -->
+  <div class="gov-stripe"></div>
+
+  <!-- Gov Banner -->
+  <div class="gov-banner">
+    <div class="container">
+      <div class="gov-banner-text">
+        <span class="gov-flag">🇮🇳</span>
+        <span>श्रम एवं रोजगार मंत्रालय | नियोक्ता कार्य प्रबंधन मंच</span>
+      </div>
+      <div>
+        <span>डिजिटल लेबर चौक</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Site Navigation Header -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="../index.html" class="brand-link">
+          <div class="brand-emblem" aria-hidden="true">🏛️</div>
+          <div class="brand-text">
+            <span class="brand-title">डिजिटल <span>लेबर चौक</span></span>
+            <span class="brand-sub">Employer Management</span>
+          </div>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="../index.html" class="nav-link">🏠 होम (Home)</a></li>
+          <li><a href="job-search.html" class="nav-link">🔎 सभी कार्य (Job Market)</a></li>
+          <li><a href="post-job.html" class="nav-link active">📝 जॉब पोस्ट (Post a Job)</a></li>
+        </ul>
+
+        <div id="nav-auth-container" class="nav-auth"></div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <main class="mt-4">
+    <div class="container">
+      <!-- Employer Welcome Banner -->
+      <div class="employer-header-banner">
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 id="emp-welcome-name" style="font-size:1.4rem; font-weight:800; color:#ffffff;">
+              नियोक्ता पोर्टल (Employer Portal)
+            </h1>
+            <span class="badge badge-saffron">सत्यापित नियोक्ता</span>
+          </div>
+          <p id="emp-welcome-details" class="text-muted" style="color:#cbd5e1; font-size:14px; margin-top:4px;">
+            सीधे साइट के लिए दैनिक कारीगर एवं मजदूर अनुबंधित करें
+          </p>
+        </div>
+
+        <div class="flex gap-2">
+          <a href="#post-form-section" class="btn btn-accent btn-sm">
+            ➕ नया काम पोस्ट करें
+          </a>
+          <a href="#posted-jobs-section" class="btn btn-outline-white btn-sm">
+            📋 पोस्ट किए गए काम (<span id="total-jobs-badge">0</span>)
+          </a>
+        </div>
+      </div>
+
+      <!-- Main Layout: Form & Posted Jobs Grid -->
+      <div class="grid-2">
+        <!-- 1. POST A JOB FORM -->
+        <div id="post-form-section">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">📝 नया कार्य प्रकाशित करें (Post New Work)</h2>
+            </div>
+            <div class="card-body">
+              <form id="form-create-job" novalidate>
+                <div class="form-group" id="grp-job-title">
+                  <label class="form-label" for="job-title">
+                    कार्य का शीर्षक (Job Title) <span class="req">*</span>
+                  </label>
+                  <input 
+                    type="text" 
+                    id="job-title" 
+                    class="form-input" 
+                    placeholder="उदा. 3-मंजिला मकान के लिए 4 राजमिस्त्री चाहिए" 
+                    required 
+                  />
+                  <div class="form-error-msg" id="err-job-title">कृपया नौकरी का शीर्षक लिखें।</div>
+                </div>
+
+                <div class="form-row flex gap-3">
+                  <div class="form-group" style="flex:1;" id="grp-job-category">
+                    <label class="form-label" for="job-category">
+                      आवश्यक ट्रेड/कारीगर <span class="req">*</span>
+                    </label>
+                    <select id="job-category" class="form-select" required>
+                      <option value="">-- ट्रेड चुनें --</option>
+                      <option value="Mason / राजमिस्त्री">🧱 राजमिस्त्री (Mason)</option>
+                      <option value="Electrician / इलेक्ट्रीशियन">⚡ इलेक्ट्रीशियन (Electrician)</option>
+                      <option value="Plumber / प्लंबर">🔧 प्लंबर (Plumber)</option>
+                      <option value="Carpenter / बढ़ई">🪚 बढ़ई (Carpenter)</option>
+                      <option value="Painter / पेंटर">🎨 पेंटर (Painter)</option>
+                      <option value="Welder / वेल्डर">🔥 वेल्डर (Welder)</option>
+                      <option value="Tile & Marble Worker / टाइल कारीगर">🏛️ टाइल/मार्बल कारीगर</option>
+                      <option value="General Labor / मजदूर">👷 मजदूर / हेल्पर (General Labor)</option>
+                    </select>
+                    <div class="form-error-msg" id="err-job-category">ट्रेड का चयन करें।</div>
+                  </div>
+
+                  <div class="form-group" style="flex:1;" id="grp-job-location">
+                    <label class="form-label" for="job-location">
+                      शहर / स्थान <span class="req">*</span>
+                    </label>
+                    <select id="job-location" class="form-select" required>
+                      <option value="">-- शहर चुनें --</option>
+                      <option value="New Delhi / नई दिल्ली">नई दिल्ली (New Delhi)</option>
+                      <option value="Noida / नोएडा">नोएडा (Noida)</option>
+                      <option value="Gurugram / गुरुग्राम">गुरुग्राम (Gurugram)</option>
+                      <option value="Jaipur / जयपुर">जयपुर (Jaipur)</option>
+                      <option value="Lucknow / लखनऊ">लखनऊ (Lucknow)</option>
+                      <option value="Mumbai / मुंबई">मुंबई (Mumbai)</option>
+                      <option value="Bengaluru / बेंगलुरु">बेंगलुरु (Bengaluru)</option>
+                      <option value="Patna / पटना">पटना (Patna)</option>
+                    </select>
+                    <div class="form-error-msg" id="err-job-location">स्थान चुनें।</div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="job-address">
+                    साइट का पता (Site Landmark / Address)
+                  </label>
+                  <input 
+                    type="text" 
+                    id="job-address" 
+                    class="form-input" 
+                    placeholder="उदा. सेक्टर 62, मेट्रो पिलर 145 के पास" 
+                  />
+                </div>
+
+                <div class="form-row flex gap-3">
+                  <div class="form-group" style="flex:1;" id="grp-job-wage">
+                    <label class="form-label" for="job-wage">
+                      दैनिक मजदूरी (Daily Wage ₹) <span class="req">*</span>
+                    </label>
+                    <div class="input-icon-wrapper">
+                      <span class="input-icon">₹</span>
+                      <input 
+                        type="number" 
+                        id="job-wage" 
+                        class="form-input input-with-icon" 
+                        placeholder="उदा. 850" 
+                        min="300" 
+                        max="10000" 
+                        required 
+                      />
+                    </div>
+                    <div class="form-error-msg" id="err-job-wage">मान्य दिहाड़ी राशि लिखें।</div>
+                  </div>
+
+                  <div class="form-group" style="flex:1;" id="grp-job-workers">
+                    <label class="form-label" for="job-workers">
+                      श्रमिकों की संख्या (Workers Needed) <span class="req">*</span>
+                    </label>
+                    <input 
+                      type="number" 
+                      id="job-workers" 
+                      class="form-input" 
+                      placeholder="उदा. 3" 
+                      min="1" 
+                      max="100" 
+                      value="2" 
+                      required 
+                    />
+                    <div class="form-error-msg" id="err-job-workers">श्रमिकों की संख्या लिखें।</div>
+                  </div>
+                </div>
+
+                <div class="form-row flex gap-3">
+                  <div class="form-group" style="flex:1;">
+                    <label class="form-label" for="job-duration">कार्य की अवधि (Duration)</label>
+                    <select id="job-duration" class="form-select">
+                      <option value="one-day">1 दिन का कार्य (Single Day)</option>
+                      <option value="multi-day" selected>कुछ दिन (Multi-day Project)</option>
+                      <option value="ongoing">दीर्घकालिक (Ongoing Work)</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group" style="flex:1;">
+                    <label class="form-label" for="job-phone">साइट संपर्क नंबर (Phone)</label>
+                    <input 
+                      type="tel" 
+                      id="job-phone" 
+                      class="form-input" 
+                      placeholder="10 अंकों का मोबाइल" 
+                      maxlength="10" 
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="job-desc">
+                    कार्य का संक्षिप्त विवरण (Work Description)
+                  </label>
+                  <textarea 
+                    id="job-desc" 
+                    class="form-textarea" 
+                    placeholder="कार्य के संबंध में विशेष निर्देश, उपकरण, या समय आदि का विवरण लिखें..."
+                  ></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-accent btn-lg btn-block">
+                  🚀 कार्य तुरंत प्रकाशित करें (Post Job)
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. EMPLOYER'S POSTED JOBS LIST -->
+        <div id="posted-jobs-section">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="card-title">📋 आपके पोस्ट किए गए कार्य (Your Jobs)</h2>
+            <span class="badge badge-navy" id="job-count-badge">0 कार्य</span>
+          </div>
+
+          <div id="employer-jobs-container">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Mobile Touch Bottom-Sheet Modal for Applicants -->
+  <div class="modal-overlay" id="applicants-modal">
+    <div class="modal-box">
+      <!-- Touch Drag Handle for Mobile Bottom Sheet -->
+      <span class="modal-drag-handle" aria-hidden="true"></span>
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-job-title">आवेदक सूची (Applicants)</h3>
+        <button type="button" class="modal-close-btn" id="close-modal-btn">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-applicants-body">
+        <!-- Injected via JS -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline btn-sm" id="btn-modal-close-footer">बंद करें (Close)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="mobile-bottom-nav">
+    <a href="../index.html" class="bottom-nav-item">
+      <span class="nav-icon">🏠</span>
+      <span>होम</span>
+    </a>
+    <a href="job-search.html" class="bottom-nav-item">
+      <span class="nav-icon">🔎</span>
+      <span>काम खोजें</span>
+    </a>
+    <a href="post-job.html" class="bottom-nav-item active">
+      <span class="nav-icon">📝</span>
+      <span>जॉब पोस्ट</span>
+    </a>
+    <a href="employer-login.html" class="bottom-nav-item">
+      <span class="nav-icon">🏢</span>
+      <span>नियोक्ता</span>
+    </a>
+  </nav>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>&copy; 2026 डिजिटल लेबर चौक | नियोक्ता प्रबंधन प्रकोष्ठ</div>
+        <div class="footer-tools">
+          <button type="button" class="btn btn-outline-white btn-sm btn-reset-demo-data">
+            🔄 रीसेट डेमो डेटा
+          </button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../js/storage.js"></script>
+  <script src="../js/toast.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/jobs.js"></script>
+  <script src="../js/main.js"></script>
+
+  <script>
+    let currentEmployer = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Require Employer Auth
+      const isAuthorized = AuthManager.requireAuth('employer', 'employer-login.html');
+      if (!isAuthorized) return;
+
+      currentEmployer = AuthManager.getCurrentUser();
+      if (!currentEmployer) return;
+
+      // Welcome header info
+      document.getElementById('emp-welcome-name').textContent = currentEmployer.name || 'नियोक्ता';
+      document.getElementById('emp-welcome-details').textContent = 
+        `📱 ${currentEmployer.phone} • 📍 ${currentEmployer.location || 'भारत'} • ${currentEmployer.businessType || 'निर्माण'}`;
+
+      // Pre-fill phone if available
+      document.getElementById('job-phone').value = currentEmployer.phone;
+
+      // Render posted jobs
+      renderEmployerJobs();
+
+      // Handle Job Post Form Submit
+      const form = document.getElementById('form-create-job');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const title = document.getElementById('job-title').value.trim();
+        const category = document.getElementById('job-category').value;
+        const location = document.getElementById('job-location').value;
+        const address = document.getElementById('job-address').value.trim();
+        const wage = document.getElementById('job-wage').value;
+        const workersNeeded = document.getElementById('job-workers').value;
+        const duration = document.getElementById('job-duration').value;
+        const contactPhone = document.getElementById('job-phone').value.trim();
+        const description = document.getElementById('job-desc').value.trim();
+
+        // Validation
+        ['title', 'category', 'location', 'wage', 'workers'].forEach(field => {
+          document.getElementById(`grp-job-${field}`).classList.remove('has-error');
+        });
+
+        let hasError = false;
+        if (!title) {
+          document.getElementById('grp-job-title').classList.add('has-error');
+          hasError = true;
+        }
+        if (!category) {
+          document.getElementById('grp-job-category').classList.add('has-error');
+          hasError = true;
+        }
+        if (!location) {
+          document.getElementById('grp-job-location').classList.add('has-error');
+          hasError = true;
+        }
+        if (!wage || parseInt(wage, 10) <= 0) {
+          document.getElementById('grp-job-wage').classList.add('has-error');
+          hasError = true;
+        }
+        if (!workersNeeded || parseInt(workersNeeded, 10) <= 0) {
+          document.getElementById('grp-job-workers').classList.add('has-error');
+          hasError = true;
+        }
+
+        if (hasError) return;
+
+        const res = JobManager.createJob({
+          title, category, location, address, wage, workersNeeded, duration, contactPhone, description
+        });
+
+        if (res.success) {
+          showToast('कार्य सफलतापूर्वक प्रकाशित किया गया! (Job Posted)', 'success');
+          form.reset();
+          document.getElementById('job-phone').value = currentEmployer.phone;
+          renderEmployerJobs();
+        } else {
+          showToast(res.message, 'error');
+        }
+      });
+
+      // Modal close handlers
+      const modal = document.getElementById('applicants-modal');
+      const closeModal = () => modal.classList.remove('active');
+      document.getElementById('close-modal-btn').addEventListener('click', closeModal);
+      document.getElementById('btn-modal-close-footer').addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+    });
+
+    function renderEmployerJobs() {
+      const container = document.getElementById('employer-jobs-container');
+      const jobs = JobManager.getJobsByEmployer(currentEmployer.id);
+
+      document.getElementById('job-count-badge').textContent = `${jobs.length} कार्य`;
+      document.getElementById('total-jobs-badge').textContent = jobs.length;
+
+      if (jobs.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">📝</div>
+            <div class="empty-title">आपने अभी तक कोई काम पोस्ट नहीं किया है</div>
+            <div class="empty-desc">बाएं दिए गए फॉर्म को भरकर तुरंत मजदूरों और कारीगरों के लिए आवश्यकता पोस्ट करें।</div>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = jobs.map(job => {
+        const apps = JobManager.getApplicationsForJob(job.id);
+        const isActive = job.status === 'active';
+        const statusBadge = isActive 
+          ? `<span class="badge badge-green">🟢 सक्रिय</span>` 
+          : `<span class="badge badge-gray">🔴 बंद</span>`;
+
+        return `
+          <div class="posted-job-item" data-job-id="${job.id}">
+            <div style="flex:1; min-width:220px;">
+              <div class="flex items-center gap-2 mb-1">
+                ${statusBadge}
+                <span class="badge badge-saffron">${escapeHTML(job.category)}</span>
+              </div>
+              <h3 style="font-size:1.05rem; font-weight:700; color:var(--primary-navy); margin-bottom:4px;">
+                ${escapeHTML(job.title)}
+              </h3>
+              <div class="text-muted" style="font-size:13px; display:flex; flex-wrap:wrap; gap:10px;">
+                <span>📍 ${escapeHTML(job.location)}</span>
+                <span>💰 ₹${job.wage}/दिन</span>
+                <span>👷 ${job.workersNeeded} कारीगर</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2" style="flex-wrap:wrap; width:100%; justify-content:flex-end;">
+              <button type="button" class="btn btn-outline btn-sm btn-view-applicants" data-job-id="${job.id}">
+                👥 आवेदक (${apps.length})
+              </button>
+              <button type="button" class="btn btn-sm btn-outline btn-toggle-status" data-job-id="${job.id}">
+                ${isActive ? 'बंद करें' : 'सक्रिय करें'}
+              </button>
+              <button type="button" class="btn btn-sm btn-danger btn-delete-job" data-job-id="${job.id}" title="Delete">
+                🗑️
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Wire up actions
+      container.querySelectorAll('.btn-view-applicants').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const jobId = e.currentTarget.getAttribute('data-job-id');
+          openApplicantsModal(jobId);
+        });
+      });
+
+      container.querySelectorAll('.btn-toggle-status').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const jobId = e.currentTarget.getAttribute('data-job-id');
+          JobManager.toggleJobStatus(jobId);
+          showToast('जॉब स्टेटस अपडेट किया गया।', 'info');
+          renderEmployerJobs();
+        });
+      });
+
+      container.querySelectorAll('.btn-delete-job').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const jobId = e.currentTarget.getAttribute('data-job-id');
+          if (confirm('क्या आप इस जॉब पोस्ट को हटाना चाहते हैं?')) {
+            JobManager.deleteJob(jobId);
+            showToast('जॉब सफलतापूर्वक हटाई गई।', 'info');
+            renderEmployerJobs();
+          }
+        });
+      });
+    }
+
+    function openApplicantsModal(jobId) {
+      const job = JobManager.getJobById(jobId);
+      const apps = JobManager.getApplicationsForJob(jobId);
+      const modal = document.getElementById('applicants-modal');
+      const body = document.getElementById('modal-applicants-body');
+      
+      document.getElementById('modal-job-title').textContent = `${job.title} — आवेदक (${apps.length})`;
+
+      if (apps.length === 0) {
+        body.innerHTML = `
+          <div class="empty-state" style="padding:24px;">
+            <div class="empty-icon" style="font-size:32px;">📭</div>
+            <div class="empty-title">अभी कोई आवेदन प्राप्त नहीं हुआ</div>
+            <div class="empty-desc">जैसे ही कोई श्रमिक आवेदन करेगा, उसकी पूरी जानकारी यहां दिखाई देगी।</div>
+          </div>
+        `;
+      } else {
+        body.innerHTML = apps.map(app => {
+          return `
+            <div class="applicant-item" data-app-id="${app.id}">
+              <div class="applicant-info">
+                <h4>👷 ${escapeHTML(app.workerName || 'श्रमिक')}</h4>
+                <div class="text-muted" style="font-size:12px;">
+                  ट्रेड: <strong>${escapeHTML(app.workerSkill || 'मजदूर')}</strong> • 
+                  अनुभव: ${escapeHTML(app.workerExperience || '1')} वर्ष
+                </div>
+                <div style="font-size:13px; margin-top:4px;">
+                  📱 <a href="tel:${app.workerPhone}" style="color:var(--national-green); font-weight:700;">${app.workerPhone}</a>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2" style="width:100%; justify-content:flex-end;">
+                <select class="form-select form-select-sm app-status-select" data-app-id="${app.id}" style="padding:6px 28px 6px 10px; font-size:12px; min-height:36px; flex:1;">
+                  <option value="Applied" ${app.status === 'Applied' ? 'selected' : ''}>आवेदन (Applied)</option>
+                  <option value="Viewed" ${app.status === 'Viewed' ? 'selected' : ''}>देखा (Viewed)</option>
+                  <option value="Shortlisted" ${app.status === 'Shortlisted' ? 'selected' : ''}>शॉर्टलिस्ट (Shortlist)</option>
+                  <option value="Selected" ${app.status === 'Selected' ? 'selected' : ''}>चयनित (Select)</option>
+                </select>
+                <a href="tel:${app.workerPhone}" class="btn btn-success btn-sm" style="min-height:36px; padding:6px 14px;">
+                  📞 कॉल करें
+                </a>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        // Wire up status dropdowns inside modal
+        body.querySelectorAll('.app-status-select').forEach(sel => {
+          sel.addEventListener('change', (e) => {
+            const appId = e.target.getAttribute('data-app-id');
+            const newStatus = e.target.value;
+            JobManager.updateApplicationStatus(appId, newStatus);
+            showToast(`आवेदक की स्थिति '${newStatus}' में बदली गई।`, 'success');
+          });
+        });
+      }
+
+      modal.classList.add('active');
+    }
+  </script>
+</body>
+</html>

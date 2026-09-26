@@ -1,0 +1,21 @@
+{
+  "name": "Digital Labor Chowk - डिजिटल लेबर चौक",
+  "short_name": "Labor Chowk",
+  "description": "Connecting daily-wage workers with employers across India directly with zero middlemen.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b2545",
+  "theme_color": "#0b2545",
+  "lang": "hi",
+  "categories": ["business", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "assets/icons/emblem.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>श्रमिक प्रोफाइल | Digital Labor Chowk</title>
+  
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#0b2545">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="../assets/icons/emblem.svg">
+  
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+
+  <style>
+    .profile-card {
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+    .profile-cover {
+      height: 100px;
+      background: linear-gradient(135deg, #0b2545 0%, #133b68 100%);
+      position: relative;
+    }
+    .profile-avatar-container {
+      position: relative;
+      margin-top: -50px;
+      margin-left: 24px;
+      display: inline-block;
+    }
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-saffron), #e65100);
+      color: #0b2545;
+      font-size: 42px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 4px solid #ffffff;
+      box-shadow: var(--shadow-md);
+    }
+    .profile-header-details {
+      padding: 16px 24px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Tricolor Top Stripe -->
+  <div class="gov-stripe"></div>
+
+  <!-- Gov Banner -->
+  <div class="gov-banner">
+    <div class="container">
+      <div class="gov-banner-text">
+        <span class="gov-flag">🇮🇳</span>
+        <span>श्रम एवं रोजगार मंत्रालय | राष्ट्रीय श्रमिक प्रोफाइल पंजीयन</span>
+      </div>
+      <div>
+        <span>डिजिटल लेबर चौक</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Site Navigation Header -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="../index.html" class="brand-link">
+          <div class="brand-emblem" aria-hidden="true">🏛️</div>
+          <div class="brand-text">
+            <span class="brand-title">डिजिटल <span>लेबर चौक</span></span>
+            <span class="brand-sub">Worker Profile</span>
+          </div>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="../index.html" class="nav-link">🏠 होम (Home)</a></li>
+          <li><a href="job-search.html" class="nav-link">🔎 काम खोजें (Search Jobs)</a></li>
+          <li><a href="worker-dashboard.html" class="nav-link">📊 डैशबोर्ड (Dashboard)</a></li>
+          <li><a href="worker-profile.html" class="nav-link active">👤 मेरी प्रोफाइल (Profile)</a></li>
+        </ul>
+
+        <div id="nav-auth-container" class="nav-auth"></div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <main class="mt-4">
+    <div class="container" style="max-width: 860px;">
+      
+      <!-- Profile Completion Gauge -->
+      <div class="progress-card">
+        <div class="progress-header">
+          <div class="progress-title">
+            <span>📊 प्रोफाइल पूर्णता (Profile Completion)</span>
+          </div>
+          <div class="progress-percentage" id="profile-progress-pct">80%</div>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="profile-progress-bar" style="width: 80%;"></div>
+        </div>
+        <p class="progress-hint">
+          💡 जितनी अधिक जानकारी आप भरेंगे, ठेकेदार आपको उतना ही जल्दी काम के लिए संपर्क करेंगे।
+        </p>
+      </div>
+
+      <!-- Main Profile Card -->
+      <div class="profile-card mb-6">
+        <div class="profile-cover"></div>
+
+        <div class="profile-avatar-container">
+          <div class="profile-avatar" id="prof-avatar-letter">R</div>
+        </div>
+
+        <div class="profile-header-details">
+          <div>
+            <h1 id="prof-display-name" style="font-size:1.6rem; font-weight:800; color:var(--primary-navy); margin-bottom:4px;">
+              रमेश कुमार (Ramesh Kumar)
+            </h1>
+            <div class="text-muted" style="font-size:14px; display:flex; flex-wrap:wrap; gap:12px;">
+              <span id="prof-display-skill">🧱 मुख्य ट्रेड: राजमिस्त्री</span>
+              <span>•</span>
+              <span id="prof-display-phone">📱 9876543210</span>
+              <span>•</span>
+              <span id="prof-display-loc">📍 नई दिल्ली</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <span class="badge badge-green" id="prof-status-badge">🟢 काम के लिए उपलब्ध</span>
+          </div>
+        </div>
+
+        <!-- Editable Form -->
+        <div class="card-body" style="border-top:1px solid var(--border-color); padding: 28px;">
+          <form id="form-worker-profile">
+            
+            <div class="form-row flex gap-3">
+              <div class="form-group" style="flex:1;">
+                <label class="form-label" for="edit-name">
+                  पूरा नाम (Full Name) <span class="req">*</span>
+                </label>
+                <input type="text" id="edit-name" class="form-input" required />
+              </div>
+
+              <div class="form-group" style="flex:1;">
+                <label class="form-label" for="edit-phone">
+                  मोबाइल नंबर (Mobile Phone)
+                </label>
+                <input type="tel" id="edit-phone" class="form-input" disabled style="background:#f1f5f9; cursor:not-allowed;" />
+                <span style="font-size:11px; color:var(--text-muted);">सुरक्षा कारणों से मोबाइल नंबर बदला नहीं जा सकता।</span>
+              </div>
+            </div>
+
+            <div class="form-row flex gap-3">
+              <div class="form-group" style="flex:1;">
+                <label class="form-label" for="edit-primary-skill">
+                  मुख्य कौशल / प्राथमिक ट्रेड (Primary Skill) <span class="req">*</span>
+                </label>
+                <select id="edit-primary-skill" class="form-select" required>
+                  <option value="Mason / राजमिस्त्री">🧱 राजमिस्त्री (Mason)</option>
+                  <option value="Electrician / इलेक्ट्रीशियन">⚡ इलेक्ट्रीशियन (Electrician)</option>
+                  <option value="Plumber / प्लंबर">🔧 प्लंबर (Plumber)</option>
+                  <option value="Carpenter / बढ़ई">🪚 बढ़ई (Carpenter)</option>
+                  <option value="Painter / पेंटर">🎨 पेंटर (Painter)</option>
+                  <option value="Welder / वेल्डर">🔥 वेल्डर (Welder)</option>
+                  <option value="Tile & Marble Worker / टाइल कारीगर">🏛️ टाइल/मार्बल कारीगर</option>
+                  <option value="General Labor / मजदूर">👷 मजदूर / हेल्पर (General Labor)</option>
+                  <option value="Driver & Loader / ड्राइवर">🚚 ड्राइवर एवं लोडर</option>
+                </select>
+              </div>
+
+              <div class="form-group" style="flex:1;">
+                <label class="form-label" for="edit-location">
+                  शहर / जिला (City) <span class="req">*</span>
+                </label>
+                <select id="edit-location" class="form-select" required>
+                  <option value="New Delhi / नई दिल्ली">नई दिल्ली (New Delhi)</option>
+                  <option value="Noida / नोएडा">नोएडा (Noida)</option>
+                  <option value="Gurugram / गुरुग्राम">गुरुग्राम (Gurugram)</option>
+                  <option value="Jaipur / जयपुर">जयपुर (Jaipur)</option>
+                  <option value="Lucknow / लखनऊ">लखनऊ (Lucknow)</option>
+                  <option value="Mumbai / मुंबई">मुंबई (Mumbai)</option>
+                  <option value="Bengaluru / बेंगलुरु">बेंगलुरु (Bengaluru)</option>
+                  <option value="Patna / पटना">पटना (Patna)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Multiple Secondary Skills Selection -->
+            <div class="form-group">
+              <label class="form-label">
+                अन्य कौशल टैग (Other Skills / Additional Trades)
+                <span class="hint">— जिन कार्यों का आपको अनुभव है, उन पर क्लिक करें</span>
+              </label>
+              <div class="skills-selector" id="skills-selector-container">
+                <!-- Dynamically populated skill chips -->
+              </div>
+            </div>
+
+            <div class="form-row flex gap-3">
+              <div class="form-group" style="flex:1;">
+                <label class="form-label" for="edit-experience">कार्य अनुभव (Years of Experience)</label>
+                <select id="edit-experience" class="form-select">
+                  <option value="1">1 वर्ष</option>
+                  <option value="2">2 वर्ष</option>
+                  <option value="3">3 वर्ष</option>
+                  <option value="4">4 वर्ष</option>
+                  <option value="5">5 वर्ष</option>
+                  <option value="7">7 वर्ष</option>
+                  <option value="10">10+ वर्ष</option>
+                </select>
+              </div>
+
+              <div class="form-group" style="flex:1;">
+                <label class="form-label" for="edit-dailywage">अपेक्षित दैनिक मजदूरी (Daily Wage ₹)</label>
+                <div class="input-icon-wrapper">
+                  <span class="input-icon">₹</span>
+                  <input type="number" id="edit-dailywage" class="form-input input-with-icon" min="300" max="5000" />
+                </div>
+              </div>
+
+              <div class="form-group" style="flex:1;">
+                <label class="form-label" for="edit-availability">उपलब्धता स्थिति (Work Availability)</label>
+                <select id="edit-availability" class="form-select">
+                  <option value="available">🟢 तुरंत काम के लिए उपलब्ध (Available)</option>
+                  <option value="busy">🔴 अभी दूसरे काम में व्यस्त (Busy)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="edit-bio">
+                अपने कार्य व हुनर का विवरण (About / Bio)
+              </label>
+              <textarea 
+                id="edit-bio" 
+                class="form-textarea" 
+                placeholder="उदा. 7 साल का चिनाई और प्लास्टर का अनुभव। आरसीसी ढलाई, टाइल लगाना भी जानता हूँ..."
+              ></textarea>
+            </div>
+
+            <div class="flex justify-between items-center mt-6">
+              <a href="worker-dashboard.html" class="btn btn-outline">
+                &larr; डैशबोर्ड पर वापस जाएं
+              </a>
+              <button type="submit" class="btn btn-accent btn-lg">
+                💾 प्रोफाइल सुरक्षित करें (Save Profile)
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="mobile-bottom-nav">
+    <a href="../index.html" class="bottom-nav-item">
+      <span class="nav-icon">🏠</span>
+      <span>होम</span>
+    </a>
+    <a href="job-search.html" class="bottom-nav-item">
+      <span class="nav-icon">🔎</span>
+      <span>काम खोजें</span>
+    </a>
+    <a href="worker-dashboard.html" id="bottom-nav-dashboard" class="bottom-nav-item">
+      <span class="nav-icon">📊</span>
+      <span>डैशबोर्ड</span>
+    </a>
+    <a href="worker-profile.html" id="bottom-nav-profile" class="bottom-nav-item active">
+      <span class="nav-icon">👤</span>
+      <span>प्रोफाइल</span>
+    </a>
+  </nav>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>&copy; 2026 डिजिटल लेबर चौक | श्रमिक प्रोफाइल पंजीयन</div>
+        <div class="footer-tools">
+          <button type="button" id="btn-reset-demo-data" class="btn btn-outline-white btn-sm">
+            🔄 रीसेट डेमो डेटा
+          </button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../js/storage.js"></script>
+  <script src="../js/toast.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/jobs.js"></script>
+  <script src="../js/main.js"></script>
+
+  <script>
+    let currentWorker = null;
+    let selectedSkills = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const isAuthorized = AuthManager.requireAuth('worker', 'worker-login.html');
+      if (!isAuthorized) return;
+
+      currentWorker = AuthManager.getCurrentUser();
+      if (!currentWorker) return;
+
+      loadWorkerProfile(currentWorker);
+
+      // Listen for form inputs to recalculate progress dynamically
+      const form = document.getElementById('form-worker-profile');
+      form.addEventListener('input', updateProgressScore);
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById('edit-name').value.trim();
+        const primarySkill = document.getElementById('edit-primary-skill').value;
+        const location = document.getElementById('edit-location').value;
+        const experience = document.getElementById('edit-experience').value;
+        const dailyWage = parseInt(document.getElementById('edit-dailywage').value, 10) || 700;
+        const availability = document.getElementById('edit-availability').value;
+        const bio = document.getElementById('edit-bio').value.trim();
+
+        if (!name) {
+          showToast('कृपया अपना नाम दर्ज करें', 'error');
+          return;
+        }
+
+        // Update worker object
+        currentWorker.name = name;
+        currentWorker.primarySkill = primarySkill;
+        currentWorker.location = location;
+        currentWorker.experience = experience;
+        currentWorker.dailyWage = dailyWage;
+        currentWorker.availability = availability;
+        currentWorker.bio = bio;
+        currentWorker.skills = Array.from(new Set([primarySkill, ...selectedSkills]));
+
+        StorageDB.saveUser(currentWorker);
+        
+        // Also update session name
+        const sess = StorageDB.getSession();
+        if (sess) {
+          sess.name = currentWorker.name;
+          StorageDB.setSession(sess);
+        }
+
+        showToast('प्रोफाइल सफलतापूर्वक अपडेट की गई! (Profile Saved)', 'success');
+        loadWorkerProfile(currentWorker);
+      });
+    });
+
+    function loadWorkerProfile(worker) {
+      document.getElementById('prof-avatar-letter').textContent = worker.name ? worker.name.charAt(0).toUpperCase() : 'W';
+      document.getElementById('prof-display-name').textContent = worker.name;
+      document.getElementById('prof-display-skill').textContent = `🛠️ ${worker.primarySkill || 'कारीगर'}`;
+      document.getElementById('prof-display-phone').textContent = `📱 ${worker.phone}`;
+      document.getElementById('prof-display-loc').textContent = `📍 ${worker.location || 'भारत'}`;
+
+      const statusBadge = document.getElementById('prof-status-badge');
+      if (worker.availability === 'busy') {
+        statusBadge.className = 'badge badge-warning';
+        statusBadge.textContent = '🔴 अभी व्यस्त (Busy)';
+      } else {
+        statusBadge.className = 'badge badge-green';
+        statusBadge.textContent = '🟢 काम के लिए उपलब्ध (Available)';
+      }
+
+      // Populate input fields
+      document.getElementById('edit-name').value = worker.name || '';
+      document.getElementById('edit-phone').value = worker.phone || '';
+      document.getElementById('edit-primary-skill').value = worker.primarySkill || 'Mason / राजमिस्त्री';
+      document.getElementById('edit-location').value = worker.location || 'New Delhi / नई दिल्ली';
+      document.getElementById('edit-experience').value = worker.experience || '3';
+      document.getElementById('edit-dailywage').value = worker.dailyWage || 800;
+      document.getElementById('edit-availability').value = worker.availability || 'available';
+      document.getElementById('edit-bio').value = worker.bio || '';
+
+      // Initialize selected skills
+      selectedSkills = worker.skills || [worker.primarySkill];
+      renderSkillChips();
+      updateProgressScore();
+    }
+
+    function renderSkillChips() {
+      const container = document.getElementById('skills-selector-container');
+      container.innerHTML = DLC_SKILLS.map(skill => {
+        const isSelected = selectedSkills.includes(skill.name);
+        return `
+          <div class="skill-chip ${isSelected ? 'selected' : ''}" data-skill-name="${escapeHTML(skill.name)}">
+            ${skill.icon} ${escapeHTML(skill.name)}
+          </div>
+        `;
+      }).join('');
+
+      container.querySelectorAll('.skill-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          const name = chip.getAttribute('data-skill-name');
+          if (selectedSkills.includes(name)) {
+            selectedSkills = selectedSkills.filter(s => s !== name);
+            chip.classList.remove('selected');
+          } else {
+            selectedSkills.push(name);
+            chip.classList.add('selected');
+          }
+          updateProgressScore();
+        });
+      });
+    }
+
+    function updateProgressScore() {
+      const name = document.getElementById('edit-name').value.trim();
+      const primarySkill = document.getElementById('edit-primary-skill').value;
+      const location = document.getElementById('edit-location').value;
+      const experience = document.getElementById('edit-experience').value;
+      const dailyWage = document.getElementById('edit-dailywage').value;
+      const bio = document.getElementById('edit-bio').value.trim();
+
+      let score = 0;
+      if (name) score += 20;
+      if (primarySkill) score += 20;
+      if (location) score += 15;
+      if (experience) score += 15;
+      if (dailyWage) score += 10;
+      if (bio && bio.length > 10) score += 10;
+      if (selectedSkills.length > 1) score += 10;
+
+      score = Math.min(score, 100);
+
+      document.getElementById('profile-progress-pct').textContent = `${score}%`;
+      document.getElementById('profile-progress-bar').style.width = `${score}%`;
+    }
+  </script>
+</body>
+</html>
