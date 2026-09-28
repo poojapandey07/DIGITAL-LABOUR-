@@ -1,223 +1,178 @@
 /**
  * DIGITAL LABOR CHOWK - AUTHENTICATION & SESSION MANAGER (js/auth.js)
- * Manages worker/employer signup, login, session validation, and page auth guards.
+ * Connects login, signup, session inspection, and demo logins to the FastAPI REST API.
  */
 
 const AuthManager = {
   /**
-   * Get current session info
-   * @returns {{ userId: string, role: 'worker'|'employer', name: string, phone: string } | null}
+   * Get current session info from JWT cache
    */
   getSession() {
-    return StorageDB.getSession();
+    const user = this.getCurrentUser();
+    if (!user) return null;
+    return {
+      userId: user.id,
+      role: user.role,
+      name: user.name,
+      phone: user.phone,
+      company: user.company_name
+    };
   },
 
   /**
-   * Get complete user profile object for current session
+   * Get current user profile from stored user
    */
   getCurrentUser() {
-    const session = this.getSession();
-    if (!session || !session.userId) return null;
-    return StorageDB.getUserById(session.userId);
+    if (window.apiClient) {
+      return window.apiClient.getUser();
+    }
+    return null;
   },
 
   /**
-   * Check if a user is currently logged in
+   * Check if user has an active JWT session
    */
   isLoggedIn() {
-    return !!this.getSession();
+    if (window.apiClient) {
+      return !!window.apiClient.getToken();
+    }
+    return false;
   },
 
-  /**
-   * Check if current user is a worker
-   */
   isWorker() {
-    const session = this.getSession();
-    return !!session && session.role === 'worker';
+    const user = this.getCurrentUser();
+    return !!user && user.role === "worker";
   },
 
-  /**
-   * Check if current user is an employer
-   */
   isEmployer() {
-    const session = this.getSession();
-    return !!session && session.role === 'employer';
+    const user = this.getCurrentUser();
+    return !!user && user.role === "employer";
   },
 
-  /**
-   * Validate Indian mobile number (10 digits starting with 6, 7, 8, or 9)
-   */
   isValidPhone(phone) {
-    const clean = String(phone).trim().replace(/\D/g, '');
+    const clean = String(phone).trim().replace(/\D/g, "");
     return /^[6-9]\d{9}$/.test(clean);
   },
 
   /**
-   * Login user by phone, password, and expected role
+   * Login user via POST /api/auth/login
    */
-  login(phone, password, expectedRole) {
-    const cleanPhone = String(phone).trim().replace(/\D/g, '');
+  async login(phone, password, expectedRole = null) {
+    const cleanPhone = String(phone).trim().replace(/\D/g, "");
     if (!cleanPhone || !password) {
-      return { success: false, message: 'कृपया मोबाइल नंबर और पासवर्ड दर्ज करें (Please enter phone & password)' };
+      return { success: false, message: "कृपया मोबाइल नंबर और पासवर्ड दर्ज करें (Enter phone & password)" };
     }
 
-    const user = StorageDB.getUserByPhone(cleanPhone);
-    if (!user) {
-      return { success: false, message: 'यह मोबाइल नंबर पंजीकृत नहीं है (Mobile number not registered)' };
+    try {
+      const res = await window.apiClient.login(cleanPhone, password, expectedRole);
+      return { success: true, user: res.user };
+    } catch (err) {
+      return { success: false, message: err.message || "लॉगिन विफल (Login failed)" };
     }
-
-    if (user.password !== password) {
-      return { success: false, message: 'गलत पासवर्ड। कृपया पुनः प्रयास करें (Incorrect password)' };
-    }
-
-    if (expectedRole && user.role !== expectedRole) {
-      const roleName = expectedRole === 'worker' ? 'श्रमिक (Worker)' : 'नियोक्ता (Employer)';
-      return { 
-        success: false, 
-        message: `यह खाता ${user.role === 'worker' ? 'श्रमिक' : 'नियोक्ता'} के रूप में पंजीकृत है। कृपया सही पोर्टल से लॉगिन करें।` 
-      };
-    }
-
-    // Set active session
-    const sessionData = {
-      userId: user.id,
-      role: user.role,
-      name: user.name,
-      phone: user.phone
-    };
-    StorageDB.setSession(sessionData);
-
-    return { success: true, user };
   },
 
   /**
-   * Register a new worker
+   * Register worker via POST /api/auth/signup
    */
-  registerWorker(data) {
-    const { name, phone, password, primarySkill, location, experience, dailyWage } = data;
+  async registerWorker(data) {
+    const { name, phone, password, primarySkill, location, experience, dailyWage, bio } = data;
 
     if (!name || name.trim().length < 2) {
-      return { success: false, message: 'कृपया अपना पूरा नाम दर्ज करें (Please enter full name)' };
+      return { success: false, message: "कृपया अपना पूरा नाम दर्ज करें (Enter full name)" };
     }
 
-    const cleanPhone = String(phone).trim().replace(/\D/g, '');
+    const cleanPhone = String(phone).trim().replace(/\D/g, "");
     if (!this.isValidPhone(cleanPhone)) {
-      return { success: false, message: 'कृपया 10 अंकों का वैध भारतीय मोबाइल नंबर दर्ज करें (Enter valid 10-digit mobile)' };
+      return { success: false, message: "कृपया 10 अंकों का वैध मोबाइल नंबर दर्ज करें (Enter valid 10-digit mobile)" };
     }
 
     if (!password || password.length < 4) {
-      return { success: false, message: 'पासवर्ड कम से कम 4 अक्षरों का होना चाहिए (Password min 4 chars)' };
+      return { success: false, message: "पासवर्ड कम से कम 4 अक्षरों का होना चाहिए (Password min 4 chars)" };
     }
 
     if (!primarySkill) {
-      return { success: false, message: 'कृपया अपना मुख्य कौशल/ट्रेड चुनें (Select primary skill/trade)' };
+      return { success: false, message: "कृपया अपना मुख्य ट्रेड/कौशल चुनें (Select trade)" };
     }
 
     if (!location) {
-      return { success: false, message: 'कृपया अपना शहर/स्थान चुनें (Select your city/location)' };
+      return { success: false, message: "कृपया अपना शहर/स्थान चुनें (Select location)" };
     }
 
-    // Check if phone already exists
-    if (StorageDB.getUserByPhone(cleanPhone)) {
-      return { success: false, message: 'यह मोबाइल नंबर पहले से पंजीकृत है (Mobile number already registered)' };
-    }
-
-    const newWorker = {
-      id: 'worker-' + Date.now(),
-      role: 'worker',
+    const payload = {
       name: name.trim(),
       phone: cleanPhone,
       password: password,
-      primarySkill: primarySkill,
+      role: "worker",
+      location: location.trim(),
       skills: [primarySkill],
-      location: location,
-      experience: experience || '1',
-      dailyWage: dailyWage ? parseInt(dailyWage, 10) : 700,
-      bio: '',
-      availability: 'available',
-      createdAt: new Date().toISOString()
+      experience_years: experience || "1",
+      daily_wage: dailyWage ? parseInt(dailyWage, 10) : 700,
+      bio: bio || ""
     };
 
-    StorageDB.saveUser(newWorker);
-
-    // Auto-login newly registered worker
-    StorageDB.setSession({
-      userId: newWorker.id,
-      role: 'worker',
-      name: newWorker.name,
-      phone: newWorker.phone
-    });
-
-    return { success: true, user: newWorker };
+    try {
+      const res = await window.apiClient.signup(payload);
+      return { success: true, user: res.user };
+    } catch (err) {
+      return { success: false, message: err.message || "पंजीकरण विफल (Registration failed)" };
+    }
   },
 
   /**
-   * Register a new employer
+   * Register employer via POST /api/auth/signup
    */
-  registerEmployer(data) {
+  async registerEmployer(data) {
     const { companyName, contactPerson, phone, password, businessType, location, address } = data;
 
     if (!companyName || companyName.trim().length < 2) {
-      return { success: false, message: 'कृपया कंपनी/नियोक्ता का नाम दर्ज करें (Enter company/employer name)' };
+      return { success: false, message: "कृपया कंपनी या नियोक्ता का नाम दर्ज करें (Enter company name)" };
     }
 
-    const cleanPhone = String(phone).trim().replace(/\D/g, '');
+    const cleanPhone = String(phone).trim().replace(/\D/g, "");
     if (!this.isValidPhone(cleanPhone)) {
-      return { success: false, message: 'कृपया 10 अंकों का वैध मोबाइल नंबर दर्ज करें (Enter valid 10-digit mobile)' };
+      return { success: false, message: "कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें (Enter valid 10-digit mobile)" };
     }
 
     if (!password || password.length < 4) {
-      return { success: false, message: 'पासवर्ड कम से कम 4 अक्षरों का होना चाहिए (Password min 4 chars)' };
+      return { success: false, message: "पासवर्ड कम से कम 4 अक्षरों का होना चाहिए (Password min 4 chars)" };
     }
 
     if (!businessType) {
-      return { success: false, message: 'कृपया व्यवसाय का प्रकार चुनें (Select business type)' };
+      return { success: false, message: "कृपया व्यवसाय का प्रकार चुनें (Select business type)" };
     }
 
     if (!location) {
-      return { success: false, message: 'कृपया अपना शहर/स्थान चुनें (Select city/location)' };
+      return { success: false, message: "कृपया अपना शहर चुनें (Select city)" };
     }
 
-    // Check if phone already registered
-    if (StorageDB.getUserByPhone(cleanPhone)) {
-      return { success: false, message: 'यह मोबाइल नंबर पहले से पंजीकृत है (Mobile number already registered)' };
-    }
-
-    const newEmployer = {
-      id: 'emp-' + Date.now(),
-      role: 'employer',
-      name: companyName.trim(),
-      company: companyName.trim(),
-      contactPerson: contactPerson ? contactPerson.trim() : companyName.trim(),
+    const payload = {
+      name: contactPerson ? contactPerson.trim() : companyName.trim(),
       phone: cleanPhone,
       password: password,
-      businessType: businessType,
-      location: location,
-      address: address || '',
-      bio: '',
-      createdAt: new Date().toISOString()
+      role: "employer",
+      location: location.trim(),
+      company_name: companyName.trim(),
+      business_type: businessType,
+      contact_person: contactPerson ? contactPerson.trim() : companyName.trim()
     };
 
-    StorageDB.saveUser(newEmployer);
-
-    // Auto-login
-    StorageDB.setSession({
-      userId: newEmployer.id,
-      role: 'employer',
-      name: newEmployer.name,
-      phone: newEmployer.phone
-    });
-
-    return { success: true, user: newEmployer };
+    try {
+      const res = await window.apiClient.signup(payload);
+      return { success: true, user: res.user };
+    } catch (err) {
+      return { success: false, message: err.message || "पंजीकरण विफल (Registration failed)" };
+    }
   },
 
   /**
-   * Logout current session
+   * Logout session and clear JWT
    */
-  logout(redirectTarget = '../index.html') {
-    StorageDB.clearSession();
-    if (typeof showToast === 'function') {
-      showToast('सफलतापूर्वक लॉगआउट किया गया (Logged out successfully)', 'info');
+  logout(redirectTarget = "../index.html") {
+    if (window.apiClient) {
+      window.apiClient.clearSession();
+    }
+    if (typeof showToast === "function") {
+      showToast("सफलतापूर्वक लॉगआउट किया गया (Logged out successfully)", "info");
     }
     setTimeout(() => {
       window.location.href = redirectTarget;
@@ -226,23 +181,20 @@ const AuthManager = {
 
   /**
    * Route Guard: verify user is authenticated with required role
-   * @param {'worker'|'employer'|'any'} requiredRole
-   * @param {string} redirectUrl - where to redirect if unauthorized
    */
-  requireAuth(requiredRole = 'any', redirectUrl = '') {
-    const session = this.getSession();
+  requireAuth(requiredRole = "any", redirectUrl = "") {
+    const user = this.getCurrentUser();
+    const token = window.apiClient ? window.apiClient.getToken() : null;
 
-    if (!session) {
-      const defaultLogin = requiredRole === 'employer' ? 'employer-login.html' : 'worker-login.html';
-      const target = redirectUrl || defaultLogin;
-      // Preserve intended return URL
-      sessionStorage.setItem('dlc_auth_redirect', window.location.href);
-      window.location.href = target;
+    if (!token || !user) {
+      const defaultLogin = requiredRole === "employer" ? "employer-login.html" : "worker-login.html";
+      sessionStorage.setItem("dlc_auth_redirect", window.location.href);
+      window.location.href = redirectUrl || defaultLogin;
       return false;
     }
 
-    if (requiredRole !== 'any' && session.role !== requiredRole) {
-      const correctLogin = requiredRole === 'employer' ? 'employer-login.html' : 'worker-login.html';
+    if (requiredRole !== "any" && user.role !== requiredRole) {
+      const correctLogin = requiredRole === "employer" ? "employer-login.html" : "worker-login.html";
       window.location.href = redirectUrl || correctLogin;
       return false;
     }
@@ -253,35 +205,15 @@ const AuthManager = {
   /**
    * One-click demo worker login
    */
-  demoWorkerLogin() {
-    const worker = StorageDB.getUserById('worker-101');
-    if (worker) {
-      StorageDB.setSession({
-        userId: worker.id,
-        role: 'worker',
-        name: worker.name,
-        phone: worker.phone
-      });
-      return worker;
-    }
-    return null;
+  async demoWorkerLogin() {
+    return this.login("9876543210", "password123", "worker");
   },
 
   /**
    * One-click demo employer login
    */
-  demoEmployerLogin() {
-    const employer = StorageDB.getUserById('emp-201');
-    if (employer) {
-      StorageDB.setSession({
-        userId: employer.id,
-        role: 'employer',
-        name: employer.name,
-        phone: employer.phone
-      });
-      return employer;
-    }
-    return null;
+  async demoEmployerLogin() {
+    return this.login("9899001122", "password123", "employer");
   }
 };
 

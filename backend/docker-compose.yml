@@ -1,0 +1,47 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: dlc_mysql
+    restart: always
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-authentication-plugin=caching_sha2_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password_123
+      MYSQL_DATABASE: digital_labor_chowk
+      MYSQL_USER: labor_user
+      MYSQL_PASSWORD: labor_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - dlc_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "labor_user", "-plabor_pass"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dlc_fastapi
+    restart: always
+    command: >
+      sh -c "alembic upgrade head &&
+             python -m app.seed &&
+             uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: mysql+pymysql://labor_user:labor_pass@db:3306/digital_labor_chowk
+      SECRET_KEY: digital_labor_chowk_jwt_secret_key_2026_super_secure
+      ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: 1440
+      CORS_ORIGINS: '["*"]'
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  dlc_mysql_data:

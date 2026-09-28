@@ -387,8 +387,14 @@ function initFooterActions() {
  * 8. Reusable Job Card HTML
  */
 function createJobCardHTML(job, hasApplied = false, showApplyBtn = true) {
-  const timeText = JobManager.timeAgo(job.postedAt);
-  const durationText = JobManager.formatDuration(job.duration);
+  const postedAt = job.posted_at || job.postedAt;
+  const duration = job.duration_type || job.duration;
+  const workersNeeded = job.workers_needed || job.workersNeeded || 1;
+  const employerName = job.employer_name || job.employerName || 'नियोक्ता';
+  const wageType = job.wage_type || job.wageType || 'दिन';
+
+  const timeText = JobManager.timeAgo(postedAt);
+  const durationText = JobManager.formatDuration(duration);
 
   let actionButton = '';
   if (showApplyBtn) {
@@ -407,21 +413,21 @@ function createJobCardHTML(job, hasApplied = false, showApplyBtn = true) {
           <h3 class="job-title">${escapeHTML(job.title)}</h3>
         </div>
         <div class="job-wage-tag">
-          ₹${job.wage} <span style="font-size:0.75rem; font-weight:normal;">/ ${job.wageType || 'दिन'}</span>
+          ₹${job.wage} <span style="font-size:0.75rem; font-weight:normal;">/ ${wageType === 'per_day' ? 'दिन' : wageType}</span>
         </div>
       </div>
 
       <div class="job-meta-grid">
         <span class="job-meta-item">📍 ${escapeHTML(job.location)}</span>
         <span class="job-meta-item">⏱️ ${durationText}</span>
-        <span class="job-meta-item">👷 ${job.workersNeeded} मजदूर चाहिए</span>
+        <span class="job-meta-item">👷 ${workersNeeded} मजदूर चाहिए</span>
       </div>
 
-      <p class="job-desc">${escapeHTML(job.description)}</p>
+      <p class="job-desc">${escapeHTML(job.description || '')}</p>
 
       <div class="job-card-footer">
         <div class="job-employer-name">
-          🏢 <span>${escapeHTML(job.employerName || 'नियोक्ता')}</span> • <span class="text-muted">${timeText}</span>
+          🏢 <span>${escapeHTML(employerName)}</span> • <span class="text-muted">${timeText}</span>
         </div>
         <div>
           ${actionButton}
