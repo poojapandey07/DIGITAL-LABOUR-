@@ -2,8 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.database import engine, Base, SessionLocal
-from app.seed import seed_database
+from app.database import engine, Base
 from app.routers import (
     auth_router,
     workers_router,
@@ -15,16 +14,11 @@ from app.routers import (
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Ensure tables exist and seed demo data if empty
+    # Ensure real SQL database tables exist on startup without any mock data
     try:
         Base.metadata.create_all(bind=engine)
-        db = SessionLocal()
-        try:
-            seed_database(db)
-        finally:
-            db.close()
     except Exception as e:
-        print(f"[Warning] Database initialization or seed encountered error: {e}")
+        print(f"[Warning] Database table creation encountered error: {e}")
     yield
 
 

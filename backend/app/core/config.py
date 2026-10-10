@@ -1,5 +1,5 @@
 import json
-from typing import List, Union
+from typing import List, Union, Optional
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -11,6 +11,9 @@ class Settings(BaseSettings):
 
     # Database
     DATABASE_URL: str = "mysql+pymysql://labor_user:labor_pass@localhost:3306/digital_labor_chowk"
+
+    # Google OAuth
+    GOOGLE_CLIENT_ID: Optional[str] = None
 
     # Security & JWT
     SECRET_KEY: str = "digital_labor_chowk_jwt_secret_key_2026_super_secure"

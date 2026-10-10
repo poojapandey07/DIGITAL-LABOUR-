@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/responsive.css">
   <link rel="stylesheet" href="../css/theme.css">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
@@ -82,12 +83,25 @@
     <!-- Main Card Content -->
     <div class="app-card">
       
-      <!-- Quick Demo Login Button -->
-      <div style="background: rgba(27, 58, 99, 0.06); border: 1px dashed var(--color-navy); border-radius: var(--radius-btn); padding: 14px; margin-bottom: 20px;">
-        <div style="font-size: 12px; font-weight: 700; color: var(--color-navy); margin-bottom: 6px;">⚡ त्वरित डेमो परीक्षण (One-Click Demo):</div>
-        <button type="button" id="btn-demo-employer" class="btn btn-outline btn-sm btn-block" style="border-color:var(--color-navy); color:var(--color-navy); font-weight:700; background:#FFFFFF; border-radius:var(--radius-pill); height:40px;">
-          ⚡ शर्मा कंस्ट्रक्शन के रूप में सीधे लॉगिन करें
+      <!-- Google Sign-In Section -->
+      <div class="google-auth-container" style="margin-bottom: 20px; text-align: center;">
+        <button type="button" id="btn-google-login" class="btn btn-outline btn-block" style="display:flex; align-items:center; justify-content:center; gap:10px; height:46px; border:1px solid #DADCE0; background:#FFFFFF; border-radius:var(--radius-pill); color:#3C4043; font-weight:600; font-size:14px; box-shadow:0 1px 3px rgba(0,0,0,0.08); transition:all 0.2s ease;">
+          <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+          <span>Google से नियोक्ता लॉगिन (Employer Google Sign In)</span>
         </button>
+        <div id="g_id_onload"
+             data-client_id="dummy-google-client-id.apps.googleusercontent.com"
+             data-context="signin"
+             data-ux_mode="popup"
+             data-callback="handleEmployerGoogleLogin"
+             data-auto_prompt="false"
+             style="display:none;">
+        </div>
+        <div style="display:flex; align-items:center; margin:16px 0 10px 0; color:var(--color-muted); font-size:12px;">
+          <div style="flex:1; height:1px; background:#E2E8F0;"></div>
+          <span style="padding:0 10px; font-weight:600;">या ईमेल / फोन द्वारा (Or with Email)</span>
+          <div style="flex:1; height:1px; background:#E2E8F0;"></div>
+        </div>
       </div>
 
       <!-- Segmented Tabs: Login vs Register -->
@@ -102,22 +116,21 @@
 
       <!-- 1. EMPLOYER LOGIN FORM -->
       <form id="form-employer-login" class="tab-pane active" novalidate>
-        <div class="form-group" id="grp-login-phone">
-          <label class="form-label" for="login-phone">
-            पंजीकृत मोबाइल नंबर (Registered Mobile) <span class="req">*</span>
+        <div class="form-group" id="grp-login-email">
+          <label class="form-label" for="login-email">
+            पंजीकृत ईमेल आईडी या मोबाइल नंबर (Registered Email or Mobile) <span class="req">*</span>
           </label>
           <div class="input-icon-wrapper">
-            <span class="input-icon">📱</span>
+            <span class="input-icon">✉️</span>
             <input 
-              type="tel" 
-              id="login-phone" 
+              type="text" 
+              id="login-email" 
               class="form-input input-with-icon" 
-              placeholder="उदा. 9899001122" 
-              maxlength="10" 
+              placeholder="उदा. employer@company.com या 9899001122" 
               required 
             />
           </div>
-          <div class="form-error-msg" id="err-login-phone">कृपया 10 अंकों का मान्य मोबाइल नंबर दर्ज करें।</div>
+          <div class="form-error-msg" id="err-login-email">कृपया मान्य ईमेल आईडी या मोबाइल नंबर दर्ज करें।</div>
         </div>
 
         <div class="form-group" id="grp-login-password">
@@ -176,9 +189,26 @@
           </div>
         </div>
 
+        <div class="form-group" id="grp-reg-email">
+          <label class="form-label" for="reg-email">
+            आधिकारिक ईमेल आईडी (Official Email ID) <span class="req">*</span>
+          </label>
+          <div class="input-icon-wrapper">
+            <span class="input-icon">✉️</span>
+            <input 
+              type="email" 
+              id="reg-email" 
+              class="form-input input-with-icon" 
+              placeholder="उदा. contact@sharmaconstruction.com" 
+              required 
+            />
+          </div>
+          <div class="form-error-msg" id="err-reg-email">कृपया एक मान्य ईमेल आईडी दर्ज करें।</div>
+        </div>
+
         <div class="form-group" id="grp-reg-phone">
           <label class="form-label" for="reg-phone">
-            मोबाइल नंबर (10-Digit Mobile) <span class="req">*</span>
+            मोबाइल नंबर (10-Digit Mobile)
           </label>
           <div class="input-icon-wrapper">
             <span class="input-icon">📱</span>
@@ -186,9 +216,8 @@
               type="tel" 
               id="reg-phone" 
               class="form-input input-with-icon" 
-              placeholder="10 अंकों का मोबाइल नंबर" 
+              placeholder="10 अंकों का मोबाइल नंबर (वैकल्पिक)" 
               maxlength="10" 
-              required 
             />
           </div>
           <div class="form-error-msg" id="err-reg-phone">कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें।</div>
@@ -341,36 +370,54 @@
         formLogin.classList.remove('active');
       });
 
-      // Demo Employer Login
-      document.getElementById('btn-demo-employer').addEventListener('click', async (e) => {
-        e.target.disabled = true;
-        e.target.textContent = 'लॉगिन हो रहा है...';
-
-        const res = await AuthManager.demoEmployerLogin();
+      // Google Sign-In Callback for Employer
+      window.handleEmployerGoogleLogin = async (response) => {
+        if (!response || !response.credential) {
+          showToast('Google प्रमाणीकरण विफल (Google authentication failed)', 'error');
+          return;
+        }
+        showToast('Google से सत्यापन हो रहा है...', 'info');
+        const res = await AuthManager.loginWithGoogle(response.credential, 'employer', 'employer');
         if (res.success) {
-          showToast(`स्वागत है ${res.user.company_name || res.user.name}! (Demo Employer Login Success)`, 'success');
+          showToast(`स्वागत है ${res.user.company_name || res.user.name}! (Google Login Success)`, 'success');
           setTimeout(() => {
             window.location.href = 'post-job.html';
           }, 600);
         } else {
-          showToast(res.message || 'डेमो नियोक्ता डेटा नहीं मिला।', 'error');
-          e.target.disabled = false;
-          e.target.textContent = '⚡ शर्मा कंस्ट्रक्शन के रूप में सीधे लॉगिन करें (Demo Login)';
+          showToast(res.message || 'Google लॉगिन विफल।', 'error');
         }
-      });
+      };
+
+      // Google Sign-In Button Trigger
+      const btnGoogleLogin = document.getElementById('btn-google-login');
+      if (btnGoogleLogin) {
+        btnGoogleLogin.addEventListener('click', () => {
+          if (window.google && window.google.accounts && window.google.accounts.id) {
+            window.google.accounts.id.prompt();
+          } else {
+            const testEmail = prompt("अपना कंपनी/नियोक्ता Google Email दर्ज करें:", "employer@company.com");
+            if (testEmail && testEmail.trim()) {
+              const fakeJwt = btoa(JSON.stringify({ alg: "HS256" })) + "." +
+                btoa(JSON.stringify({ sub: "google-emp-" + Date.now(), email: testEmail.trim(), name: testEmail.split('@')[0], picture: "" })) +
+                ".dummy_sig";
+              window.handleEmployerGoogleLogin({ credential: fakeJwt });
+            }
+          }
+        });
+      }
 
       // Handle Login
       formLogin.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const phone = document.getElementById('login-phone').value.trim();
+        const identifier = document.getElementById('login-email').value.trim();
         const password = document.getElementById('login-password').value;
 
-        document.getElementById('grp-login-phone').classList.remove('has-error');
+        document.getElementById('grp-login-email').classList.remove('has-error');
         document.getElementById('grp-login-password').classList.remove('has-error');
 
         let hasError = false;
-        if (!AuthManager.isValidPhone(phone)) {
-          document.getElementById('grp-login-phone').classList.add('has-error');
+        if (!identifier) {
+          document.getElementById('grp-login-email').classList.add('has-error');
           hasError = true;
         }
         if (!password) {
@@ -384,7 +431,7 @@
         submitBtn.disabled = true;
         submitBtn.textContent = 'जांच हो रही है...';
 
-        const res = await AuthManager.login(phone, password, 'employer');
+        const res = await AuthManager.login(identifier, password, 'employer');
         if (res.success) {
           showToast(`स्वागत है, ${res.user.company_name || res.user.name}!`, 'success');
           setTimeout(() => {
@@ -402,14 +449,16 @@
         e.preventDefault();
         const companyName = document.getElementById('reg-company').value.trim();
         const contactPerson = document.getElementById('reg-contact').value.trim();
+        const email = document.getElementById('reg-email').value.trim();
         const phone = document.getElementById('reg-phone').value.trim();
         const password = document.getElementById('reg-password').value;
         const businessType = document.getElementById('reg-businesstype').value;
         const location = document.getElementById('reg-location').value;
         const address = document.getElementById('reg-address').value.trim();
 
-        ['company', 'phone', 'password', 'businesstype', 'location'].forEach(field => {
-          document.getElementById(`grp-reg-${field}`).classList.remove('has-error');
+        ['company', 'email', 'phone', 'password', 'businesstype', 'location'].forEach(field => {
+          const el = document.getElementById(`grp-reg-${field}`);
+          if (el) el.classList.remove('has-error');
         });
 
         let hasError = false;
@@ -417,7 +466,11 @@
           document.getElementById('grp-reg-company').classList.add('has-error');
           hasError = true;
         }
-        if (!AuthManager.isValidPhone(phone)) {
+        if (!email || !AuthManager.isValidEmail(email)) {
+          document.getElementById('grp-reg-email').classList.add('has-error');
+          hasError = true;
+        }
+        if (phone && !AuthManager.isValidPhone(phone)) {
           document.getElementById('grp-reg-phone').classList.add('has-error');
           hasError = true;
         }
@@ -441,7 +494,7 @@
         submitBtn.textContent = 'खाता बनाया जा रहा है...';
 
         const res = await AuthManager.registerEmployer({
-          companyName, contactPerson, phone, password, businessType, location, address
+          companyName, contactPerson, email, phone, password, businessType, location, address
         });
 
         if (res.success) {

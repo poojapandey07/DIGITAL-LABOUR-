@@ -1,6 +1,7 @@
 from app.schemas.user import (
     UserCreate,
     UserLogin,
+    GoogleLoginRequest,
     UserOut,
     Token,
     TokenPayload,
@@ -22,6 +23,7 @@ from app.schemas.application import (
 __all__ = [
     "UserCreate",
     "UserLogin",
+    "GoogleLoginRequest",
     "UserOut",
     "Token",
     "TokenPayload",

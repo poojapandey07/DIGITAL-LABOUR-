@@ -339,7 +339,7 @@
         if (st === 'selected') statusBadge = '<span class="badge badge-green">चयनित</span>';
         if (st === 'rejected') statusBadge = '<span class="badge badge-gray">अस्वीकृत</span>';
 
-        const phone = job.contact_phone || app.employerPhone || '9899001122';
+        const phone = job.contact_phone || app.employerPhone || '';
 
         return `
           <tr style="border-bottom:1px solid #F1F5F9;">
@@ -349,9 +349,7 @@
             <td style="padding:12px 8px; color:var(--color-muted);">${formattedDate}</td>
             <td style="padding:12px 8px;">${statusBadge}</td>
             <td style="padding:12px 8px;">
-              <a href="tel:${phone}" class="btn btn-sm btn-outline" style="border-radius:var(--radius-pill); font-size:11px; padding:3px 10px;">
-                📞 संपर्क
-              </a>
+              ${phone ? `<a href="tel:${phone}" class="btn btn-sm btn-outline" style="border-radius:var(--radius-pill); font-size:11px; padding:3px 10px;">📞 संपर्क</a>` : '<span style="font-size:11px; color:var(--color-muted);">-</span>'}
             </td>
           </tr>
         `;
@@ -373,7 +371,7 @@
         if (st === 'selected') statusBadge = '<span class="badge badge-green" style="font-size:11px;">चयनित</span>';
         if (st === 'rejected') statusBadge = '<span class="badge badge-gray" style="font-size:11px;">अस्वीकृत</span>';
 
-        const phone = job.contact_phone || app.employerPhone || '9899001122';
+        const phone = job.contact_phone || app.employerPhone || '';
 
         return `
           <div class="mobile-app-card">
@@ -387,11 +385,12 @@
             <div style="font-size:12px; color:var(--color-muted); margin-bottom:8px;">
               🏢 ${escapeHTML(employerName)} • <strong style="color:var(--color-navy);">₹${wage}/दिन</strong>
             </div>
+            ${phone ? `
             <div class="flex justify-end">
               <a href="tel:${phone}" class="btn btn-sm btn-outline btn-block" style="border-radius:var(--radius-pill); font-size:12px; text-align:center; height:36px;">
                 📞 ठेकेदार को कॉल करें
               </a>
-            </div>
+            </div>` : ''}
           </div>
         `;
       }).join('');

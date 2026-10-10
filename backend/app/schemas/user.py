@@ -6,13 +6,15 @@ from app.models.user import UserRole
 
 class UserBase(BaseModel):
     name: str = Field(..., min_length=2, max_length=120)
-    phone: str = Field(..., min_length=10, max_length=15)
+    email: Optional[str] = None
+    phone: Optional[str] = None
     role: UserRole
     location: Optional[str] = None
+    avatar_url: Optional[str] = None
 
 
 class UserCreate(UserBase):
-    password: str = Field(..., min_length=4)
+    password: Optional[str] = Field(None, min_length=4)
     # Worker optional fields
     skills: Optional[List[str]] = None
     experience_years: Optional[str] = None
@@ -25,8 +27,15 @@ class UserCreate(UserBase):
 
 
 class UserLogin(BaseModel):
-    phone: str
+    email: Optional[str] = None
+    phone: Optional[str] = None
     password: str
+    expected_role: Optional[UserRole] = None
+
+
+class GoogleLoginRequest(BaseModel):
+    credential: str
+    role: Optional[UserRole] = None
     expected_role: Optional[UserRole] = None
 
 

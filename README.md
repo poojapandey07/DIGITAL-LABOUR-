@@ -18,11 +18,11 @@ A responsive, mobile-first web application connecting daily-wage workers (*mazdo
    - **Mobile Cards (Dual-View)**: Automatically transforms wide desktop data tables into swipeable touch cards on small screens.
    - **Mobile Bottom-Sheet Modals**: Dialogs smoothly slide up from the bottom of phone screens with touch drag handles.
 
-3. **⚡ Zero-Config Demo Experience & Mock Database**:
-   - Powered purely by **client-side `localStorage`** (no backend/server setup required).
-   - Automatically pre-seeded with realistic Indian labor market data (trades, cities, wages in ₹/day, sample applicants, and postings).
-   - **1-Click Quick Demo Login buttons** on both login pages for immediate end-to-end evaluation.
-   - Built-in **"🔄 Reset Demo Data"** action in the footer to restore seed state anytime.
+3. **⚡ Pure SQL Persistence with Python FastAPI REST Backend**:
+   - Powered by a robust **Python (FastAPI + SQLAlchemy)** REST API.
+   - Genuine data storage in **SQL relational database** (MySQL 8.0+ / persistent SQL file).
+   - Zero mock/demo data injected: only actual user registrations, job postings, and applications are persisted.
+   - Modern Authentication: Login and Register with **Email ID** or **Google Sign-In** (OAuth / Google Identity Services) alongside phone.
 
 4. **👷 Worker Portal**:
    - **Tabbed Login/Signup** with phone validation, trade selection, and wage expectations.

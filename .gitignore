@@ -15,9 +15,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Logs
-*.log
-
-# Temporary Files
-*.tmp
-*.bak
+# Python & Database
+*.db
+*.sqlite*
+__pycache__/
+*.py[cod]
+.env
+.pytest_cache/

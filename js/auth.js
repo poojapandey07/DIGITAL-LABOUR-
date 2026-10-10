@@ -54,17 +54,21 @@ const AuthManager = {
     return /^[6-9]\d{9}$/.test(clean);
   },
 
+  isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email).trim());
+  },
+
   /**
-   * Login user via POST /api/auth/login
+   * Login user via POST /api/auth/login (supports Email ID or Phone)
    */
-  async login(phone, password, expectedRole = null) {
-    const cleanPhone = String(phone).trim().replace(/\D/g, "");
-    if (!cleanPhone || !password) {
-      return { success: false, message: "कृपया मोबाइल नंबर और पासवर्ड दर्ज करें (Enter phone & password)" };
+  async login(identifier, password, expectedRole = null) {
+    const clean = String(identifier || "").trim();
+    if (!clean || !password) {
+      return { success: false, message: "कृपया ईमेल आईडी/मोबाइल नंबर और पासवर्ड दर्ज करें (Enter email/phone & password)" };
     }
 
     try {
-      const res = await window.apiClient.login(cleanPhone, password, expectedRole);
+      const res = await window.apiClient.login(clean, password, expectedRole);
       return { success: true, user: res.user };
     } catch (err) {
       return { success: false, message: err.message || "लॉगिन विफल (Login failed)" };
@@ -72,17 +76,42 @@ const AuthManager = {
   },
 
   /**
+   * Login or signup via Google Sign-In credential
+   */
+  async loginWithGoogle(credential, role = null, expectedRole = null) {
+    if (!credential) {
+      return { success: false, message: "Google क्रेडेंशियल टोकन प्राप्त नहीं हुआ (Google credential missing)" };
+    }
+    try {
+      const res = await window.apiClient.googleLogin(credential, role, expectedRole);
+      return { success: true, user: res.user };
+    } catch (err) {
+      return { success: false, message: err.message || "Google लॉगिन विफल (Google sign-in failed)" };
+    }
+  },
+
+  /**
    * Register worker via POST /api/auth/signup
    */
   async registerWorker(data) {
-    const { name, phone, password, primarySkill, location, experience, dailyWage, bio } = data;
+    const { name, email, phone, password, primarySkill, location, experience, dailyWage, bio } = data;
 
     if (!name || name.trim().length < 2) {
       return { success: false, message: "कृपया अपना पूरा नाम दर्ज करें (Enter full name)" };
     }
 
-    const cleanPhone = String(phone).trim().replace(/\D/g, "");
-    if (!this.isValidPhone(cleanPhone)) {
+    const cleanEmail = email ? String(email).trim().toLowerCase() : "";
+    const cleanPhone = phone ? String(phone).trim().replace(/\D/g, "") : "";
+
+    if (!cleanEmail && !cleanPhone) {
+      return { success: false, message: "कृपया ईमेल आईडी या मोबाइल नंबर दर्ज करें (Enter email or phone)" };
+    }
+
+    if (cleanEmail && !this.isValidEmail(cleanEmail)) {
+      return { success: false, message: "कृपया मान्य ईमेल आईडी दर्ज करें (Enter valid email)" };
+    }
+
+    if (cleanPhone && !this.isValidPhone(cleanPhone)) {
       return { success: false, message: "कृपया 10 अंकों का वैध मोबाइल नंबर दर्ज करें (Enter valid 10-digit mobile)" };
     }
 
@@ -100,7 +129,8 @@ const AuthManager = {
 
     const payload = {
       name: name.trim(),
-      phone: cleanPhone,
+      email: cleanEmail || undefined,
+      phone: cleanPhone || undefined,
       password: password,
       role: "worker",
       location: location.trim(),
@@ -122,14 +152,24 @@ const AuthManager = {
    * Register employer via POST /api/auth/signup
    */
   async registerEmployer(data) {
-    const { companyName, contactPerson, phone, password, businessType, location, address } = data;
+    const { companyName, contactPerson, email, phone, password, businessType, location, address } = data;
 
     if (!companyName || companyName.trim().length < 2) {
       return { success: false, message: "कृपया कंपनी या नियोक्ता का नाम दर्ज करें (Enter company name)" };
     }
 
-    const cleanPhone = String(phone).trim().replace(/\D/g, "");
-    if (!this.isValidPhone(cleanPhone)) {
+    const cleanEmail = email ? String(email).trim().toLowerCase() : "";
+    const cleanPhone = phone ? String(phone).trim().replace(/\D/g, "") : "";
+
+    if (!cleanEmail && !cleanPhone) {
+      return { success: false, message: "कृपया ईमेल आईडी या मोबाइल नंबर दर्ज करें (Enter email or phone)" };
+    }
+
+    if (cleanEmail && !this.isValidEmail(cleanEmail)) {
+      return { success: false, message: "कृपया मान्य ईमेल आईडी दर्ज करें (Enter valid email)" };
+    }
+
+    if (cleanPhone && !this.isValidPhone(cleanPhone)) {
       return { success: false, message: "कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें (Enter valid 10-digit mobile)" };
     }
 
@@ -147,7 +187,8 @@ const AuthManager = {
 
     const payload = {
       name: contactPerson ? contactPerson.trim() : companyName.trim(),
-      phone: cleanPhone,
+      email: cleanEmail || undefined,
+      phone: cleanPhone || undefined,
       password: password,
       role: "employer",
       location: location.trim(),
@@ -200,20 +241,6 @@ const AuthManager = {
     }
 
     return true;
-  },
-
-  /**
-   * One-click demo worker login
-   */
-  async demoWorkerLogin() {
-    return this.login("9876543210", "password123", "worker");
-  },
-
-  /**
-   * One-click demo employer login
-   */
-  async demoEmployerLogin() {
-    return this.login("9899001122", "password123", "employer");
   }
 };
 

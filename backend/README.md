@@ -84,7 +84,7 @@ pip install -r requirements.txt
 ```
 
 ### 3. Configure Environment Variables
-Copy `.env.example` to `.env`:
+Copy `.env.example` to `.env` (optional, defaults connect automatically):
 ```bash
 cp .env.example .env
 ```
@@ -96,31 +96,13 @@ ACCESS_TOKEN_EXPIRE_MINUTES=1440
 CORS_ORIGINS=["*"]
 ```
 
-> **Note for SQLite zero-install testing**: You can also set `DATABASE_URL=sqlite:///./labor_chowk.db` to test the backend immediately without MySQL running.
+> **Zero-Config Persistent SQL Storage**: If MySQL is not running on localhost, the backend automatically connects to a persistent local SQL database (`digital_labor_chowk.db`). All real user registrations, jobs, and applications are reliably stored in SQL relational tables.
 
-### 4. Run MySQL with Docker Compose (Recommended)
-If you have Docker installed, spin up MySQL with:
-```bash
-docker compose up -d db
-```
-This starts MySQL 8.0 with `utf8mb4` charset and creates the `digital_labor_chowk` database automatically on port `3306`.
-
-### 5. Apply Database Migrations
-```bash
-alembic upgrade head
-```
-
-### 6. Seed Demo Data
-Populate realistic Indian demo workers (Ramesh Kumar, Sunita Devi), employers (Sharma Constructions), and 8 active job postings:
-```bash
-python -m app.seed
-```
-
-### 7. Start the Development Server
+### 4. Start the Development Server
 ```bash
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
-Open **http://localhost:8000/docs** in your browser to view the interactive OpenAPI / Swagger UI!
+Open **http://localhost:8000/docs** in your browser to view the interactive OpenAPI / Swagger UI! No demo data is injected—the database is 100% clean and ready for real users.
 
 ---
 

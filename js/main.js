@@ -366,14 +366,14 @@ function initMobileBottomNav() {
  * 7. Footer Actions
  */
 function initFooterActions() {
-  const resetBtns = document.querySelectorAll('#btn-reset-demo-data, .btn-reset-demo-data');
+  const resetBtns = document.querySelectorAll('#btn-reset-demo-data, .btn-reset-demo-data, #btn-reset-cache');
   resetBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
-      if (confirm('क्या आप डेमो डेटा को रीसेट करना चाहते हैं? (Reset all demo data to default?)')) {
+      if (confirm('क्या आप स्थानीय कैश और डेटा को साफ़ करना चाहते हैं? (Reset cache?)')) {
         StorageDB.resetAllData();
         if (typeof showToast === 'function') {
-          showToast('डेमो डेटा सफलतापूर्वक रीसेट किया गया (Demo data reset)', 'success');
+          showToast('स्थानीय कैश सफलतापूर्वक साफ़ किया गया', 'success');
         }
         setTimeout(() => {
           window.location.reload();

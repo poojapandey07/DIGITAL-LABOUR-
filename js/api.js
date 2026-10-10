@@ -176,11 +176,28 @@ class ApiClient {
     return res;
   }
 
-  async login(phone, password, expectedRole = null) {
-    const payload = { phone, password };
+  async login(identifier, password, expectedRole = null) {
+    const clean = String(identifier || "").trim();
+    const payload = { password };
+    if (clean.includes("@")) {
+      payload.email = clean.toLowerCase();
+    } else {
+      payload.phone = clean;
+    }
     if (expectedRole) payload.expected_role = expectedRole;
 
     const res = await this.post("/auth/login", payload);
+    this.setToken(res.access_token);
+    this.setUser(res.user);
+    return res;
+  }
+
+  async googleLogin(credential, role = null, expectedRole = null) {
+    const payload = { credential };
+    if (role) payload.role = role;
+    if (expectedRole) payload.expected_role = expectedRole;
+
+    const res = await this.post("/auth/google", payload);
     this.setToken(res.access_token);
     this.setUser(res.user);
     return res;
